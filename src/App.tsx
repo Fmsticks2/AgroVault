@@ -14,9 +14,9 @@ function App() {
     <Router>
       <div className="min-h-screen bg-background-dark text-text-primary font-sans">
         <Navbar />
-        <div className="flex">
+        <div className="flex w-full">
           <Sidebar />
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-8 max-w-[2000px] mx-auto">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/staking" element={<Staking />} />

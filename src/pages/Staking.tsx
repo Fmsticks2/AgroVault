@@ -35,7 +35,7 @@ const Staking = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-2xl font-semibold">Staking</h1>
         <div className="flex items-center space-x-4">
           <div className="stat-card flex items-center space-x-3 py-2 px-4">

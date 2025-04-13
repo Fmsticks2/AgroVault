@@ -30,8 +30,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-background border-b border-border px-6 py-4">
-      <div className="flex items-center justify-between">
+    <nav className="bg-background border-b border-border w-full px-6 py-4">
+      <div className="max-w-[2000px] mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-8">
           <Link to="/" className="flex items-center space-x-2">
             <img src="/new logo.svg" alt="AgroVault" className="h-16 w-16" />
