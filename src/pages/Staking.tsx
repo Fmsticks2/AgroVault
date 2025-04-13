@@ -59,17 +59,17 @@ const Staking = () => {
                   className={`w-full p-4 rounded-lg border transition-colors ${pool.id === selectedPool.id ? 'border-primary bg-background-light' : 'border-border hover:border-primary'}`}
                   onClick={() => setSelectedPool(pool)}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between w-full">
                     <div className="flex items-center space-x-3">
-                      <div className="h-10 w-10 rounded-full bg-background flex items-center justify-center">
+                      <div className="h-10 w-10 rounded-full bg-background flex items-center justify-center flex-shrink-0">
                         {pool.token.charAt(0)}
                       </div>
-                      <div className="text-left">
+                      <div className="flex flex-col items-start">
                         <div className="font-medium">{pool.name}</div>
                         <div className="text-sm text-text-secondary">{pool.token}</div>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="flex flex-col items-end">
                       <div className="text-success font-medium">{pool.apy}% APY</div>
                       <div className="text-sm text-text-secondary">
                         ${(pool.totalStaked).toLocaleString()} TVL

@@ -37,12 +37,12 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {mockData.protocolMetrics.map((metric) => (
-          <div key={metric.name} className="stat-card">
+          <div key={metric.name} className="stat-card flex flex-col">
             <div className="flex items-center space-x-2 mb-4">
-              <metric.icon className="h-5 w-5 text-primary" />
-              <span className="text-text-secondary">{metric.name}</span>
+              <metric.icon className="h-5 w-5 text-primary flex-shrink-0" />
+              <span className="text-text-secondary text-left">{metric.name}</span>
             </div>
-            <div className="stat-value">
+            <div className="stat-value text-left">
               {typeof metric.value === 'number' ? `$${metric.value.toLocaleString()}` : metric.value}
             </div>
           </div>
@@ -83,21 +83,21 @@ const Dashboard = () => {
             <h2 className="text-lg font-semibold mb-4">Top Assets</h2>
             <div className="space-y-4">
               {mockData.topAssets.map((asset) => (
-                <div key={asset.symbol} className="flex items-center justify-between">
+                <div key={asset.symbol} className="flex items-center justify-between p-3 hover:bg-background-light rounded-lg transition-colors">
                   <div className="flex items-center space-x-3">
-                    <div className="h-8 w-8 rounded-full bg-background-light flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-full bg-background-light flex items-center justify-center flex-shrink-0">
                       {asset.symbol.charAt(0)}
                     </div>
-                    <div>
+                    <div className="flex flex-col items-start">
                       <div className="font-medium">{asset.name}</div>
                       <div className="text-sm text-text-secondary">{asset.symbol}</div>
                     </div>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right flex flex-col items-end">
                     <div>{asset.price}</div>
-                    <div className="text-sm">
+                    <div className="text-sm flex items-center space-x-2">
                       <span className="text-text-secondary">{asset.marketCap}</span>
-                      <span className={`ml-2 ${asset.change.startsWith('+') ? 'text-success' : 'text-text-secondary'}`}>
+                      <span className={`${asset.change.startsWith('+') ? 'text-success' : 'text-text-secondary'}`}>
                         {asset.change}
                       </span>
                     </div>

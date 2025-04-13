@@ -48,8 +48,8 @@ const Lending = () => {
         <h1 className="text-2xl font-semibold">Lending</h1>
         <div className="flex items-center space-x-4">
           <div className="stat-card flex items-center space-x-3 py-2 px-4">
-            <BanknotesIcon className="h-5 w-5 text-primary" />
-            <div>
+            <BanknotesIcon className="h-5 w-5 text-primary flex-shrink-0" />
+            <div className="flex flex-col items-start">
               <div className="text-sm text-text-secondary">Total Market Size</div>
               <div className="font-medium">${(152950000).toLocaleString()}</div>
             </div>
@@ -81,10 +81,10 @@ const Lending = () => {
                     >
                       <td className="py-4">
                         <div className="flex items-center space-x-3">
-                          <div className="h-8 w-8 rounded-full bg-background flex items-center justify-center">
+                          <div className="h-8 w-8 rounded-full bg-background flex items-center justify-center flex-shrink-0">
                             {market.token.charAt(0)}
                           </div>
-                          <span>{market.token}</span>
+                          <span className="text-left">{market.token}</span>
                         </div>
                       </td>
                       <td className="text-right text-success">{market.supplyApy}%</td>

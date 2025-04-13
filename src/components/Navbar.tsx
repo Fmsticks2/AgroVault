@@ -33,17 +33,17 @@ const Navbar = () => {
     <nav className="bg-background border-b border-border w-full px-6 py-4">
       <div className="max-w-[2000px] mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-8">
-          <Link to="/" className="flex items-center space-x-2">
-            <img src="/new logo.svg" alt="AgroVault" className="h-16 w-16" />
-            <span className="text-xl font-semibold text-text-primary">AgroVault</span>
+          <Link to="/" className="flex items-center space-x-3">
+            <img src="/new logo.svg" alt="AgroVault" className="h-12 w-12" />
+            <span className="text-xl font-semibold text-text-primary whitespace-nowrap">AgroVault</span>
           </Link>
           
-          <div className="hidden md:flex items-center space-x-6">
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Link to="/" className="text-text-secondary hover:text-text-primary transition-colors">Analytics</Link>
-            <Link to="/operations" className="text-text-secondary hover:text-text-primary transition-colors">Operations</Link>
-            <Link to="/rates" className="text-text-secondary hover:text-text-primary transition-colors">Rates</Link>
-            <Link to="/settings" className="text-text-secondary hover:text-text-primary transition-colors">Settings</Link>
+          <div className="hidden md:flex items-center space-x-8">
+            {error && <p className="text-red-500 text-sm px-2">{error}</p>}
+            <Link to="/" className="text-text-secondary hover:text-text-primary transition-colors px-2 py-1">Analytics</Link>
+            <Link to="/operations" className="text-text-secondary hover:text-text-primary transition-colors px-2 py-1">Operations</Link>
+            <Link to="/rates" className="text-text-secondary hover:text-text-primary transition-colors px-2 py-1">Rates</Link>
+            <Link to="/settings" className="text-text-secondary hover:text-text-primary transition-colors px-2 py-1">Settings</Link>
           </div>
           
           <button
@@ -80,9 +80,9 @@ const Navbar = () => {
         <div className="flex items-center space-x-4">
           {isConnected ? (
             <Menu as="div" className="relative">
-              <Menu.Button className="btn-secondary flex items-center space-x-2">
+              <Menu.Button className="btn-secondary flex items-center justify-center space-x-3 px-4 py-2 min-w-[160px]">
                 <WalletIcon className="h-5 w-5" />
-                <span>{account.slice(0, 6)}...{account.slice(-4)}</span>
+                <span className="text-sm font-medium">{account.slice(0, 6)}...{account.slice(-4)}</span>
                 <ChevronDownIcon className="h-4 w-4" />
               </Menu.Button>
               <Menu.Items className="absolute right-0 mt-2 w-48 bg-background-light border border-border rounded-lg shadow-lg py-1">
@@ -102,10 +102,10 @@ const Navbar = () => {
             <button 
               onClick={connectWallet} 
               disabled={isLoading}
-              className={`btn-primary flex items-center space-x-2 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`btn-primary flex items-center justify-center space-x-3 px-4 py-2 min-w-[160px] ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <WalletIcon className="h-5 w-5" />
-              <span>{isLoading ? 'Connecting...' : 'Connect Wallet'}</span>
+              <span className="text-sm font-medium">{isLoading ? 'Connecting...' : 'Connect Wallet'}</span>
             </button>
           )}
         </div>

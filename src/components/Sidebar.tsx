@@ -24,7 +24,7 @@ const Sidebar = () => {
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              `flex items-center justify-start space-x-4 px-4 py-3 rounded-lg transition-colors ${
                 isActive
                   ? 'bg-background-light text-primary'
                   : 'text-text-secondary hover:bg-background-light hover:text-text-primary'
@@ -32,7 +32,7 @@ const Sidebar = () => {
             }
           >
             <item.icon className="h-5 w-5" />
-            <span>{item.name}</span>
+            <span className="text-sm font-medium whitespace-nowrap">{item.name}</span>
           </NavLink>
         ))}
       </div>
