@@ -25,6 +25,10 @@ const mockData = {
     { type: 'Supply', amount: '2.5 ETH', time: '15 minutes ago' },
     { type: 'Farm', amount: '500 AGRI-ETH LP', time: '1 hour ago' },
     { type: 'Vote', amount: 'Proposal #1', time: '2 hours ago' },
+    { type: 'Borrow', amount: '5,000 USDC', time: '3 hours ago' },
+    { type: 'Harvest', amount: '250 AGRI', time: '4 hours ago' },
+    { type: 'Supply', amount: '10,000 USDC', time: '5 hours ago' },
+    { type: 'Stake', amount: '2,500 AGRI', time: '6 hours ago' },
   ],
 };
 
@@ -111,17 +115,17 @@ const Dashboard = () => {
         <div className="space-y-6">
           <div className="card">
             <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
-            <div className="space-y-4">
+            <div className="space-y-4 max-h-[480px] overflow-y-auto pr-2">
               {mockData.recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="h-2 w-2 rounded-full bg-primary" />
-                    <div>
-                      <div className="font-medium">{activity.type}</div>
-                      <div className="text-sm text-text-secondary">{activity.amount}</div>
+                <div key={index} className="flex items-center justify-between p-2 hover:bg-background-light rounded-lg transition-colors">
+                  <div className="flex items-center space-x-3 min-w-0">
+                    <div className="h-2 w-2 rounded-full bg-primary flex-shrink-0" />
+                    <div className="min-w-0">
+                      <div className="font-medium truncate">{activity.type}</div>
+                      <div className="text-sm text-text-secondary truncate">{activity.amount}</div>
                     </div>
                   </div>
-                  <div className="text-sm text-text-secondary">{activity.time}</div>
+                  <div className="text-sm text-text-secondary flex-shrink-0 ml-4">{activity.time}</div>
                 </div>
               ))}
             </div>
