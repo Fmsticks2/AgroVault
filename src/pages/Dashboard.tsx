@@ -115,7 +115,7 @@ const Dashboard = () => {
         <div className="space-y-6">
           <div className="card">
             <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
-            <div className="space-y-4 max-h-[480px] overflow-y-auto pr-2">
+            <div className="space-y-4 max-h-[480px] overflow-y-auto pr-2 custom-scrollbar">
               {mockData.recentActivity.map((activity, index) => (
                 <div key={index} className="flex items-center justify-between p-2 hover:bg-background-light rounded-lg transition-colors">
                   <div className="flex items-center space-x-3 min-w-0">

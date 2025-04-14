@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { WalletIcon, ChevronDownIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import Profile from './Profile';
 
 const Navbar = () => {
+  const location = useLocation();
   const [isConnected, setIsConnected] = useState(false);
   const [account, setAccount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -40,10 +42,30 @@ const Navbar = () => {
           
           <div className="hidden md:flex items-center space-x-8">
             {error && <p className="text-red-500 text-sm px-2">{error}</p>}
-            <Link to="/" className="text-text-secondary hover:text-text-primary transition-colors px-2 py-1">Analytics</Link>
-            <Link to="/operations" className="text-text-secondary hover:text-text-primary transition-colors px-2 py-1">Operations</Link>
-            <Link to="/rates" className="text-text-secondary hover:text-text-primary transition-colors px-2 py-1">Rates</Link>
-            <Link to="/settings" className="text-text-secondary hover:text-text-primary transition-colors px-2 py-1">Settings</Link>
+            <Link to="/" className={`relative px-2 py-1 transition-colors ${location.pathname === '/' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+              Analytics
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+            </Link>
+            <Link to="/operations" className={`relative px-2 py-1 transition-colors ${location.pathname === '/operations' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+              Operations
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+            </Link>
+            <Link to="/rates" className={`relative px-2 py-1 transition-colors ${location.pathname === '/rates' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+              Rates
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+            </Link>
+            <Link to="/whitepaper" className={`relative px-2 py-1 transition-colors ${location.pathname === '/whitepaper' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+              Whitepaper
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+            </Link>
+            <Link to="/tokenomics" className={`relative px-2 py-1 transition-colors ${location.pathname === '/tokenomics' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+              Tokenomics
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+            </Link>
+            <Link to="/settings" className={`relative px-2 py-1 transition-colors ${location.pathname === '/settings' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+              Settings
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+            </Link>
           </div>
           
           <button
@@ -68,10 +90,30 @@ const Navbar = () => {
           >
             <div className="absolute top-16 left-0 right-0 bg-background border-b border-border p-4 md:hidden">
               <div className="flex flex-col space-y-4">
-                <Link to="/" className="text-text-secondary hover:text-text-primary transition-colors">Analytics</Link>
-                <Link to="/operations" className="text-text-secondary hover:text-text-primary transition-colors">Operations</Link>
-                <Link to="/rates" className="text-text-secondary hover:text-text-primary transition-colors">Rates</Link>
-                <Link to="/settings" className="text-text-secondary hover:text-text-primary transition-colors">Settings</Link>
+                <Link to="/" className={`relative px-2 py-1 transition-colors ${location.pathname === '/' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+                  Analytics
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                </Link>
+                <Link to="/operations" className={`relative px-2 py-1 transition-colors ${location.pathname === '/operations' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+                  Operations
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                </Link>
+                <Link to="/rates" className={`relative px-2 py-1 transition-colors ${location.pathname === '/rates' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+                  Rates
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                </Link>
+                <Link to="/whitepaper" className={`relative px-2 py-1 transition-colors ${location.pathname === '/whitepaper' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+                  Whitepaper
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                </Link>
+                <Link to="/tokenomics" className={`relative px-2 py-1 transition-colors ${location.pathname === '/tokenomics' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+                  Tokenomics
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                </Link>
+                <Link to="/settings" className={`relative px-2 py-1 transition-colors ${location.pathname === '/settings' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+                  Settings
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                </Link>
               </div>
             </div>
           </Transition>
@@ -99,14 +141,17 @@ const Navbar = () => {
               </Menu.Items>
             </Menu>
           ) : (
-            <button 
-              onClick={connectWallet} 
-              disabled={isLoading}
-              className={`btn-primary flex items-center justify-center space-x-3 px-4 py-2 min-w-[160px] ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              <WalletIcon className="h-5 w-5" />
-              <span className="text-sm font-medium">{isLoading ? 'Connecting...' : 'Connect Wallet'}</span>
-            </button>
+            <div className="flex items-center space-x-4">
+              <button 
+                onClick={connectWallet} 
+                disabled={isLoading}
+                className={`btn-primary flex items-center justify-center space-x-3 px-4 py-2 min-w-[160px] ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <WalletIcon className="h-5 w-5" />
+                <span className="text-sm font-medium">{isLoading ? 'Connecting...' : 'Connect Wallet'}</span>
+              </button>
+              {isConnected && <Profile />}
+            </div>
           )}
         </div>
       </div>
