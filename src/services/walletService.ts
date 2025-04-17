@@ -14,11 +14,12 @@ export interface ConnectedWallet {
 
 class WalletService {
   private static availableWallets: WalletInfo[] = [
-    { name: 'Nami', icon: 'nami-logo', installed: false },
+    { name: 'Lace', icon: 'lace-logo', installed: false }, // Added Lace
     { name: 'Eternl', icon: 'eternl-logo', installed: false },
     { name: 'Flint', icon: 'flint-logo', installed: false },
     { name: 'Gero', icon: 'gero-logo', installed: false },
     { name: 'Typhon', icon: 'typhon-logo', installed: false }
+    // Removed Nami
   ];
 
   static async getInstalledWallets(): Promise<WalletInfo[]> {

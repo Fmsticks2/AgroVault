@@ -4,7 +4,10 @@
 
 @layer base {
   body {
-    @apply bg-background-dark text-text-primary antialiased;
+    /* @apply bg-background-dark text-text-primary antialiased; */ /* Old style */
+    @apply text-text-primary antialiased;
+    background: radial-gradient(ellipse at center, #1a1d1f 0%, #0a0b0c 70%); /* New gradient */
+    min-height: 100vh; /* Ensure gradient covers full height */
   }
 }
 
