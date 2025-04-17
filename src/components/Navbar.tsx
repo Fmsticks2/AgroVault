@@ -61,29 +61,29 @@ const Navbar = () => {
           
           <div className="hidden md:flex items-center space-x-8">
             {error && <p className="text-red-500 text-sm px-2">{error}</p>}
-            <Link to="/" className={`relative px-2 py-1 transition-colors ${location.pathname === '/' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+            <Link to="/" className={`relative px-2 py-1 transition-colors duration-300 ${location.pathname === '/' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
               Analytics
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ease-out ${location.pathname === '/' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
             </Link>
-            <Link to="/operations" className={`relative px-2 py-1 transition-colors ${location.pathname === '/operations' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+            <Link to="/operations" className={`relative px-2 py-1 transition-colors duration-300 ${location.pathname === '/operations' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
               Operations
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ease-out ${location.pathname === '/operations' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
             </Link>
-            <Link to="/rates" className={`relative px-2 py-1 transition-colors ${location.pathname === '/rates' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+            <Link to="/rates" className={`relative px-2 py-1 transition-colors duration-300 ${location.pathname === '/rates' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
               Rates
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ease-out ${location.pathname === '/rates' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
             </Link>
-            <Link to="/whitepaper" className={`relative px-2 py-1 transition-colors ${location.pathname === '/whitepaper' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+            <Link to="/whitepaper" className={`relative px-2 py-1 transition-colors duration-300 ${location.pathname === '/whitepaper' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
               Whitepaper
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ease-out ${location.pathname === '/whitepaper' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
             </Link>
-            <Link to="/tokenomics" className={`relative px-2 py-1 transition-colors ${location.pathname === '/tokenomics' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+            <Link to="/tokenomics" className={`relative px-2 py-1 transition-colors duration-300 ${location.pathname === '/tokenomics' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
               Tokenomics
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ease-out ${location.pathname === '/tokenomics' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
             </Link>
-            <Link to="/settings" className={`relative px-2 py-1 transition-colors ${location.pathname === '/settings' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+            <Link to="/settings" className={`relative px-2 py-1 transition-colors duration-300 ${location.pathname === '/settings' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
               Settings
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ease-out ${location.pathname === '/settings' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
             </Link>
           </div>
           
@@ -107,31 +107,31 @@ const Navbar = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <div className="absolute top-16 left-0 right-0 bg-background border-b border-border p-4 md:hidden">
+            <div className="absolute top-16 left-0 right-0 bg-background border-b border-border p-4 md:hidden z-50">
               <div className="flex flex-col space-y-4">
-                <Link to="/" className={`relative px-2 py-1 transition-colors ${location.pathname === '/' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+                <Link to="/" className={`relative px-2 py-1 transition-colors duration-300 ${location.pathname === '/' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`} onClick={() => setIsMobileMenuOpen(false)}>
                   Analytics
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ease-out ${location.pathname === '/' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
                 </Link>
-                <Link to="/operations" className={`relative px-2 py-1 transition-colors ${location.pathname === '/operations' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+                <Link to="/operations" className={`relative px-2 py-1 transition-colors duration-300 ${location.pathname === '/operations' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`} onClick={() => setIsMobileMenuOpen(false)}>
                   Operations
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ease-out ${location.pathname === '/operations' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
                 </Link>
-                <Link to="/rates" className={`relative px-2 py-1 transition-colors ${location.pathname === '/rates' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+                <Link to="/rates" className={`relative px-2 py-1 transition-colors duration-300 ${location.pathname === '/rates' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`} onClick={() => setIsMobileMenuOpen(false)}>
                   Rates
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ease-out ${location.pathname === '/rates' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
                 </Link>
-                <Link to="/whitepaper" className={`relative px-2 py-1 transition-colors ${location.pathname === '/whitepaper' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+                <Link to="/whitepaper" className={`relative px-2 py-1 transition-colors duration-300 ${location.pathname === '/whitepaper' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`} onClick={() => setIsMobileMenuOpen(false)}>
                   Whitepaper
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ease-out ${location.pathname === '/whitepaper' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
                 </Link>
-                <Link to="/tokenomics" className={`relative px-2 py-1 transition-colors ${location.pathname === '/tokenomics' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+                <Link to="/tokenomics" className={`relative px-2 py-1 transition-colors duration-300 ${location.pathname === '/tokenomics' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`} onClick={() => setIsMobileMenuOpen(false)}>
                   Tokenomics
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ease-out ${location.pathname === '/tokenomics' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
                 </Link>
-                <Link to="/settings" className={`relative px-2 py-1 transition-colors ${location.pathname === '/settings' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`}>
+                <Link to="/settings" className={`relative px-2 py-1 transition-colors duration-300 ${location.pathname === '/settings' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'} group`} onClick={() => setIsMobileMenuOpen(false)}>
                   Settings
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform transition-transform duration-300 ease-out ${location.pathname === '/settings' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
                 </Link>
               </div>
             </div>

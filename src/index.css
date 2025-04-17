@@ -6,22 +6,25 @@
   body {
     /* @apply bg-background-dark text-text-primary antialiased; */ /* Old style */
     @apply text-text-primary antialiased;
-    background: radial-gradient(ellipse at center, #1a1d1f 0%, #0a0b0c 70%); /* New gradient */
+    /* Enhanced background with subtle animation */
+    background: linear-gradient(135deg, #0a0b0c 0%, #1a1d1f 50%, #0a0b0c 100%);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
     min-height: 100vh; /* Ensure gradient covers full height */
   }
 }
 
 @layer components {
   .card {
-    @apply bg-background rounded-xl border border-border p-6;
+    @apply bg-background rounded-xl border border-border p-6 transition-all duration-300 ease-in-out hover:shadow-xl hover:border-border/50;
   }
   
   .btn-primary {
-    @apply bg-primary hover:bg-primary-dark text-background-dark font-medium px-4 py-2 rounded-lg transition-colors;
+    @apply bg-primary hover:bg-primary-dark text-background-dark font-medium px-4 py-2 rounded-lg transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg;
   }
   
   .btn-secondary {
-    @apply bg-background-light hover:bg-background text-text-primary font-medium px-4 py-2 rounded-lg transition-colors border border-border;
+    @apply bg-background-light hover:bg-background text-text-primary font-medium px-4 py-2 rounded-lg transition-all duration-300 ease-in-out border border-border transform hover:-translate-y-0.5 shadow-sm hover:shadow-md;
   }
   
   .input {
@@ -29,7 +32,7 @@
   }
   
   .stat-card {
-    @apply bg-background rounded-xl border border-border p-4;
+    @apply bg-background rounded-xl border border-border p-4 transition-all duration-300 ease-in-out hover:shadow-lg hover:border-primary/50 hover:-translate-y-1;
   }
   
   .stat-value {
@@ -46,5 +49,18 @@
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Keyframes for background animation */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Add smooth transitions to links */
+a {
+  @apply transition-colors duration-200 ease-in-out;
 }
