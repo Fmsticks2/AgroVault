@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { WalletIcon, ChevronDownIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import Profile from './Profile';
+import WalletService, { WalletInfo, ConnectedWallet } from '../services/walletService';
 
 const Navbar = () => {
   const location = useLocation();
@@ -11,23 +12,41 @@ const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [availableWallets, setAvailableWallets] = useState<WalletInfo[]>([]);
+  const [selectedWallet, setSelectedWallet] = useState<string>('');
 
-  const connectWallet = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        setIsLoading(true);
-        setError('');
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        setAccount(accounts[0]);
-        setIsConnected(true);
-      } catch (error) {
-        console.error('Error connecting wallet:', error);
-        setError('Failed to connect wallet. Please try again.');
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      setError('Please install MetaMask to connect your wallet.');
+  useEffect(() => {
+    const loadWallets = async () => {
+      const wallets = await WalletService.getInstalledWallets();
+      setAvailableWallets(wallets);
+    };
+    loadWallets();
+  }, []);
+
+  const connectWallet = async (walletName: string) => {
+    try {
+      setIsLoading(true);
+      setError('');
+      const walletData = await WalletService.connectWallet(walletName);
+      setAccount(walletData.address);
+      setSelectedWallet(walletName);
+      setIsConnected(true);
+    } catch (error) {
+      console.error('Error connecting wallet:', error);
+      setError('Failed to connect wallet. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const disconnectWallet = async () => {
+    try {
+      await WalletService.disconnectWallet();
+      setIsConnected(false);
+      setAccount('');
+      setSelectedWallet('');
+    } catch (error) {
+      console.error('Error disconnecting wallet:', error);
     }
   };
 
@@ -124,7 +143,7 @@ const Navbar = () => {
             <Menu as="div" className="relative">
               <Menu.Button className="btn-secondary flex items-center justify-center space-x-3 px-4 py-2 min-w-[160px]">
                 <WalletIcon className="h-5 w-5" />
-                <span className="text-sm font-medium">{account.slice(0, 6)}...{account.slice(-4)}</span>
+                <span className="text-sm font-medium">{selectedWallet} - {account.slice(0, 6)}...{account.slice(-4)}</span>
                 <ChevronDownIcon className="h-4 w-4" />
               </Menu.Button>
               <Menu.Items className="absolute right-0 mt-2 w-48 bg-background-light border border-border rounded-lg shadow-lg py-1">
@@ -132,7 +151,7 @@ const Navbar = () => {
                   {({ active }) => (
                     <button
                       className={`${active ? 'bg-background' : ''} w-full text-left px-4 py-2 text-text-primary`}
-                      onClick={() => setIsConnected(false)}
+                      onClick={disconnectWallet}
                     >
                       Disconnect
                     </button>
@@ -142,14 +161,31 @@ const Navbar = () => {
             </Menu>
           ) : (
             <div className="flex items-center space-x-4">
-              <button 
-                onClick={connectWallet} 
-                disabled={isLoading}
-                className={`btn-primary flex items-center justify-center space-x-3 px-4 py-2 min-w-[160px] ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <WalletIcon className="h-5 w-5" />
-                <span className="text-sm font-medium">{isLoading ? 'Connecting...' : 'Connect Wallet'}</span>
-              </button>
+              <Menu as="div" className="relative">
+                <Menu.Button
+                  className={`btn-primary flex items-center justify-center space-x-3 px-4 py-2 min-w-[160px] ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={isLoading}
+                >
+                  <WalletIcon className="h-5 w-5" />
+                  <span className="text-sm font-medium">{isLoading ? 'Connecting...' : 'Connect Wallet'}</span>
+                  <ChevronDownIcon className="h-4 w-4" />
+                </Menu.Button>
+                <Menu.Items className="absolute right-0 mt-2 w-48 bg-background-light border border-border rounded-lg shadow-lg py-1">
+                  {availableWallets.map((wallet) => (
+                    <Menu.Item key={wallet.name}>
+                      {({ active }) => (
+                        <button
+                          className={`${active ? 'bg-background' : ''} w-full text-left px-4 py-2 text-text-primary ${!wallet.installed ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          onClick={() => wallet.installed && connectWallet(wallet.name)}
+                          disabled={!wallet.installed}
+                        >
+                          {wallet.name} {!wallet.installed && '(Not Installed)'}
+                        </button>
+                      )}
+                    </Menu.Item>
+                  ))}
+                </Menu.Items>
+              </Menu>
               {isConnected && <Profile />}
             </div>
           )}
