@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "vite --open --port 3000",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -13,14 +14,18 @@
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@meshsdk/core": "^1.5.8",
+    "@radix-ui/react-slot": "^1.2.0",
+    "@radix-ui/react-tooltip": "^1.2.4",
     "@web3-react/core": "^8.2.3",
     "@web3-react/injected-connector": "^6.0.7",
     "axios": "^1.8.4",
     "bip39": "^3.1.0",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
+    "class-variance-authority": "^0.7.1",
     "ethers": "^6.13.5",
     "lodash": "^4.17.21",
+    "lucide-react": "^0.507.0",
     "process": "^0.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -28,7 +33,10 @@
     "react-router-dom": "^6.15.0",
     "react-toastify": "^11.0.5",
     "recharts": "^2.7.2",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.5",
     "stream-browserify": "^3.0.0",
+    "tailwind-merge": "^3.2.0",
     "util": "^0.12.5"
   },
   "devDependencies": {

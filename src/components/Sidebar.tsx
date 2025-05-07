@@ -1,11 +1,7 @@
+import { SidebarContent, SidebarTrigger, useSidebar } from '../components/CustomSidebar';
 import { NavLink } from 'react-router-dom';
-import {
-  ChartBarIcon,
-  CurrencyDollarIcon,
-  BanknotesIcon,
-  BuildingLibraryIcon,
-  UserGroupIcon,
-} from '@heroicons/react/24/outline';
+import { ChartBarIcon, CurrencyDollarIcon, BanknotesIcon, BuildingLibraryIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+
 
 const navItems = [
   { name: 'Dashboard', path: '/', icon: ChartBarIcon },
@@ -15,29 +11,32 @@ const navItems = [
   { name: 'Governance', path: '/governance', icon: UserGroupIcon },
 ];
 
-const Sidebar = () => {
+const SidebarNavigation = () => {
+  const { state } = useSidebar();
+  const isCollapsed = state === 'collapsed';
+
   return (
-    <aside className="w-64 bg-background border-r border-border min-h-screen p-6">
-      <div className="space-y-2">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) =>
-              `flex items-center justify-start space-x-4 px-4 py-3 rounded-lg transition-colors ${
-                isActive
-                  ? 'bg-background-light text-primary'
-                  : 'text-text-secondary hover:bg-background-light hover:text-text-primary'
-              }`
-            }
-          >
-            <item.icon className="h-5 w-5" />
-            <span className="text-sm font-medium whitespace-nowrap">{item.name}</span>
-          </NavLink>
-        ))}
-      </div>
-    </aside>
+    <SidebarContent>
+      <SidebarTrigger className="w-full flex justify-end p-2 pt-8" />
+      {navItems.map((item) => (
+        <NavLink
+          key={item.path}
+          to={item.path}
+          className={({ isActive }) =>
+            `flex items-center ${isCollapsed ? 'justify-center' : 'justify-start space-x-4'} 
+             px-4 py-2 mt-6 rounded-lg transition-colors ${
+              isActive
+                ? 'bg-background-light text-primary'
+                : 'text-text-secondary hover:bg-background-light hover:text-text-primary'
+            }`
+          }
+        >
+          <item.icon className="h-5 w-5" />
+          {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap">{item.name}</span>}
+        </NavLink>
+      ))}
+    </SidebarContent>
   );
 };
 
-export default Sidebar;
+export default SidebarNavigation

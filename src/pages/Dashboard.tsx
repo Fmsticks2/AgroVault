@@ -33,31 +33,43 @@ const mockData = {
 };
 
 const Dashboard = () => {
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
-      </div>
+  const getResponsiveFontSize = () => {
+    return window.innerWidth <= 640 ? 10 : 12;
+  };
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  const getAxisDisplay = () => {
+    return window.innerWidth <= 480 ? 'none' : 'auto';
+  };
+
+  return (
+    <div className="w-full min-w-0 space-y-4 md:space-y-6 py-6 pt-10 pl-20 md:pl-24 lg:px-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold">Dashboard</h2>
+      </div>
+      
+      {/* Protocol Metrics */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 w-full">
         {mockData.protocolMetrics.map((metric) => (
-          <div key={metric.name} className="stat-card flex flex-col">
-            <div className="flex items-center space-x-2 mb-4">
-              <metric.icon className="h-5 w-5 text-primary flex-shrink-0" />
-              <span className="text-text-secondary text-left">{metric.name}</span>
+          <div key={metric.name} className="w-[calc(100%-1px)] stat-card flex flex-col p-2 md:p-4 rounded-lg">
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+              <metric.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-primary flex-shrink-0" />
+              <span className="text-text-secondary text-[11px] xs:text-xs sm:text-sm lg:text-base truncate">{metric.name}</span>
             </div>
-            <div className="stat-value text-left">
+            <div className="stat-value text-xs sm:text-sm md:text-base lg:text-lg text-start font-semibold">
               {typeof metric.value === 'number' ? `$${metric.value.toLocaleString()}` : metric.value}
             </div>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <div className="card">
-            <h2 className="text-lg font-semibold mb-4">Protocol Growth</h2>
-            <div className="h-64">
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr,1fr] gap-3 md:gap-4">
+        {/* Charts Section */}
+        <div className="space-y-3 md:space-y-4 w-full">
+          {/* Protocol Growth */}
+          <div className="card p-3 py-3 !px-2 !-pl-0 sm:!px-10 space-y-6 md:p-4 rounded-lg">
+            <h2 className="text-sm md:text-base font-semibold mb-3">Protocol Growth</h2>
+            <div className="h-[200px] xs:h-[250px] sm:h-[300px] md:h-[350px]">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={mockData.tvlData}>
                   <defs>
@@ -66,11 +78,35 @@ const Dashboard = () => {
                       <stop offset="100%" stopColor="#00F7B1" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <XAxis dataKey="date" stroke="#6F767E" />
-                  <YAxis stroke="#6F767E" />
+                  <XAxis 
+                    dataKey="date" 
+                    stroke="#6F767E"
+                    tick={{ fontSize: getResponsiveFontSize() }}
+                    tickSize={8}
+                  />
+                  <YAxis 
+                    stroke="#6F767E"
+                    tick={{ 
+                      fontSize: getResponsiveFontSize(),
+                      // display: getAxisDisplay()
+                    }}
+                    tickSize={8}
+                    width={getAxisDisplay() === 'none' ? 40 : 35}
+                  />
                   <Tooltip
-                    contentStyle={{ background: '#1A1D1F', border: '1px solid #2A2F34' }}
-                    itemStyle={{ color: '#FFFFFF' }}
+                    contentStyle={{ 
+                      background: '#1A1D1F', 
+                      border: '1px solid #2A2F34',
+                      fontSize: getResponsiveFontSize(),
+                      padding: '8px'
+                    }}
+                    itemStyle={{ 
+                      color: '#FFFFFF',
+                      fontSize: getResponsiveFontSize()
+                    }}
+                    labelStyle={{
+                      fontSize: getResponsiveFontSize()
+                    }}
                   />
                   <Area
                     type="monotone"
@@ -83,25 +119,25 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="card mt-6">
-            <h2 className="text-lg font-semibold mb-4">Top Assets</h2>
-            <div className="space-y-4">
+          {/* Top Assets */}
+          <div className="card py-3 !px-2 sm:!px-10 space-y-6 p-3 md:p-4 rounded-lg">
+            <h2 className="text-sm md:text-base font-semibold mb-3">Top Assets</h2>
+            <div className="flex flex-col gap-2">
               {mockData.topAssets.map((asset) => (
-                <div key={asset.symbol} className="flex items-center justify-between p-3 hover:bg-background-light rounded-lg transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <div className="h-8 w-8 rounded-full bg-background-light flex items-center justify-center flex-shrink-0">
-                      {asset.symbol.charAt(0)}
-                    </div>
-                    <div className="flex flex-col items-start">
-                      <div className="font-medium">{asset.name}</div>
-                      <div className="text-sm text-text-secondary">{asset.symbol}</div>
-                    </div>
+                <div key={asset.symbol} 
+                     className="grid grid-cols-[auto,1fr,auto] sm:grid-cols-[auto,1fr,auto] items-center gap-3 p-2 hover:bg-background-light rounded-lg transition-colors">
+                  <div className="hidden sm:flex h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-background-light items-center justify-center flex-shrink-0">
+                    <span className="text-xs sm:text-sm">{asset.symbol.charAt(0)}</span>
                   </div>
-                  <div className="text-right flex flex-col items-end">
-                    <div>{asset.price}</div>
-                    <div className="text-sm flex items-center space-x-2">
-                      <span className="text-text-secondary">{asset.marketCap}</span>
-                      <span className={`${asset.change.startsWith('+') ? 'text-success' : 'text-text-secondary'}`}>
+                  <div className="min-w-0 flex flex-col items-start">
+                    <div className="font-medium text-sm xs:text-base truncate">{asset.name}</div>
+                    <div className="text-xs text-text-secondary">{asset.symbol}</div>
+                  </div>
+                  <div className="flex flex-col items-end gap-0.5">
+                    <div className="text-xs xs:text-base font-medium">{asset.price}</div>
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="text-text-secondary hidden xs:inline">{asset.marketCap}</span>
+                      <span className={asset.change.startsWith('+') ? 'text-success' : 'text-text-secondary'}>
                         {asset.change}
                       </span>
                     </div>
@@ -112,20 +148,19 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="card">
-            <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
-            <div className="space-y-4 max-h-[480px] overflow-y-auto pr-2 custom-scrollbar">
+        {/* Recent Activity */}
+        <div className="w-full">
+          <div className="card py-3 !px-2 sm:!px-10 space-y-6 md:p-4 rounded-lg">
+            <h2 className="text-sm md:text-lg font-semibold mb-3">Recent Activity</h2>
+            <div className="flex flex-col gap-2 max-h-[400px]scrollbar-custom">
               {mockData.recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-center justify-between p-2 hover:bg-background-light rounded-lg transition-colors">
-                  <div className="flex items-center space-x-3 min-w-0">
-                    <div className="h-2 w-2 rounded-full bg-primary flex-shrink-0" />
-                    <div className="min-w-0">
-                      <div className="font-medium truncate">{activity.type}</div>
-                      <div className="text-sm text-text-secondary truncate">{activity.amount}</div>
-                    </div>
+                <div key={index} className="grid grid-cols-[auto,1fr,auto] items-start gap-2 p-2 hover:bg-background-light rounded-lg transition-colors">
+                  <div className="h-2 w-2 rounded-full bg-primary flex-shrink-0 mt-1.5" />
+                  <div className="min-w-0 flex flex-col items-start">
+                    <div className="font-medium text-sm md:text-base truncate">{activity.type}</div>
+                    <div className="text-xs text-text-secondary truncate">{activity.amount}</div>
                   </div>
-                  <div className="text-sm text-text-secondary flex-shrink-0 ml-4">{activity.time}</div>
+                  <div className="text-xs text-text-secondary whitespace-nowrap">{activity.time}</div>
                 </div>
               ))}
             </div>
