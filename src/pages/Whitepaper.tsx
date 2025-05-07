@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Whitepaper = () => {
   return (
-    <div className="max-w-[2000px] mx-auto space-y-8 pb-8">
+    <div className="max-w-[2000px] mx-auto space-y-8 pb-8 w-full min-w-0 md:space-y-6 py-6 pt-24 pl-20 md:pl-24 lg:px-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold">Whitepaper</h1>
       </div>
@@ -58,6 +58,7 @@ const Whitepaper = () => {
             </div>
           </div>
 
+          {/* Roadmap Component */}
           <div className="card">
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <RocketLaunchIcon className="h-6 w-6 text-primary" />
@@ -100,6 +101,44 @@ const Whitepaper = () => {
                   </ul>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Resources Component - Now separate */}
+          <div className="card">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <DocumentTextIcon className="h-6 w-6 text-primary" />
+              Resources
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <a
+                href="#"
+                className="p-4 rounded-lg hover:bg-background-light transition-colors border border-border hover:border-primary"
+              >
+                <div className="font-medium">Technical Documentation</div>
+                <div className="text-sm text-text-secondary mt-1">Detailed platform specifications</div>
+              </a>
+              <a
+                href="#"
+                className="p-4 rounded-lg hover:bg-background-light transition-colors border border-border hover:border-primary"
+              >
+                <div className="font-medium">Security Audit Report</div>
+                <div className="text-sm text-text-secondary mt-1">Third-party security assessment</div>
+              </a>
+              <Link
+                to="/tokenomics"
+                className="p-4 rounded-lg hover:bg-background-light transition-colors border border-border hover:border-primary"
+              >
+                <div className="font-medium">Tokenomics</div>
+                <div className="text-sm text-text-secondary mt-1">Token distribution and economics</div>
+              </Link>
+              <a
+                href="#"
+                className="p-4 rounded-lg hover:bg-background-light transition-colors border border-border hover:border-primary"
+              >
+                <div className="font-medium">Economic Paper</div>
+                <div className="text-sm text-text-secondary mt-1">Token economics and incentives</div>
+              </a>
             </div>
           </div>
         </div>
@@ -175,38 +214,6 @@ const Whitepaper = () => {
                 <p className="text-text-secondary">Strategic partnerships with leading agricultural organizations, technology providers, and financial institutions.</p>
               </div>
             </div>
-          </div>
-
-          <div className="card space-y-4">
-            <h3 className="font-medium">Resources</h3>
-            <a
-              href="#"
-              className="block p-3 rounded-lg hover:bg-background-light transition-colors"
-            >
-              <div className="font-medium">Technical Documentation</div>
-              <div className="text-sm text-text-secondary">Detailed platform specifications</div>
-            </a>
-            <a
-              href="#"
-              className="block p-3 rounded-lg hover:bg-background-light transition-colors"
-            >
-              <div className="font-medium">Security Audit Report</div>
-              <div className="text-sm text-text-secondary">Third-party security assessment</div>
-            </a>
-            <Link
-              to="/tokenomics"
-              className="block p-3 rounded-lg hover:bg-background-light transition-colors"
-            >
-              <div className="font-medium">Tokenomics</div>
-              <div className="text-sm text-text-secondary">Token distribution and economics</div>
-            </Link>
-            <a
-              href="#"
-              className="block p-3 rounded-lg hover:bg-background-light transition-colors"
-            >
-              <div className="font-medium">Economic Paper</div>
-              <div className="text-sm text-text-secondary">Token economics and incentives</div>
-            </a>
           </div>
         </div>
       </div>

@@ -43,7 +43,7 @@ const Lending = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full min-w-0 md:space-y-6 py-6 pt-20 pl-20 md:pl-24 lg:px-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold">Lending</h1>
         <div className="flex items-center space-x-4">
@@ -61,36 +61,44 @@ const Lending = () => {
         <div className="lg:col-span-2">
           <div className="card">
             <h2 className="text-lg font-semibold mb-4">Lending Markets</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full">
+            <div className="overflow-x-auto scrollbar-custom">
+              <table className="w-full border-separate border-spacing-y-2">
                 <thead>
                   <tr className="text-text-secondary text-sm">
-                    <th className="text-left pb-4">Asset</th>
-                    <th className="text-right pb-4">Supply APY</th>
-                    <th className="text-right pb-4">Borrow APY</th>
-                    <th className="text-right pb-4">Total Supplied</th>
-                    <th className="text-right pb-4">Total Borrowed</th>
+                    <th className="text-left pb-4 whitespace-nowrap">Asset</th>
+                    <th className="text-right pb-4 whitespace-nowrap px-4">Supply APY</th>
+                    <th className="text-right pb-4 whitespace-nowrap px-4">Borrow APY</th>
+                    <th className="text-right pb-4 whitespace-nowrap px-4">Total Supplied</th>
+                    <th className="text-right pb-4 whitespace-nowrap px-4">Total Borrowed</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">
+                <tbody>
                   {mockData.markets.map((market) => (
                     <tr
                       key={market.token}
-                      className="cursor-pointer hover:bg-background-light"
+                      className="cursor-pointer hover:bg-background-light transition-colors"
                       onClick={() => setSelectedMarket(market)}
                     >
-                      <td className="py-4">
-                        <div className="flex items-center space-x-3">
+                      <td className="bg-background-light rounded-l-lg p-4 whitespace-nowrap">
+                        <div className="flex items-center gap-3">
                           <div className="h-8 w-8 rounded-full bg-background flex items-center justify-center flex-shrink-0">
                             {market.token.charAt(0)}
                           </div>
-                          <span className="text-left">{market.token}</span>
+                          <span>{market.token}</span>
                         </div>
                       </td>
-                      <td className="text-right text-success">{market.supplyApy}%</td>
-                      <td className="text-right text-error">{market.borrowApy}%</td>
-                      <td className="text-right">${(market.totalSupplied).toLocaleString()}</td>
-                      <td className="text-right">${(market.totalBorrowed).toLocaleString()}</td>
+                      <td className="bg-background-light p-4 text-right text-success whitespace-nowrap">
+                        {market.supplyApy}%
+                      </td>
+                      <td className="bg-background-light p-4 text-right text-error whitespace-nowrap">
+                        {market.borrowApy}%
+                      </td>
+                      <td className="bg-background-light p-4 text-right whitespace-nowrap">
+                        ${market.totalSupplied.toLocaleString()}
+                      </td>
+                      <td className="bg-background-light rounded-r-lg p-4 text-right whitespace-nowrap">
+                        ${market.totalBorrowed.toLocaleString()}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

@@ -1,8 +1,7 @@
-import React from 'react';
 
 const Operations = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full min-w-0 md:space-y-6 py-6 pt-24 pl-20 md:pl-24 lg:px-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-text-primary">Operations</h1>
       </div>

@@ -17,7 +17,7 @@ const SidebarNavigation = () => {
 
   return (
     <SidebarContent>
-      <SidebarTrigger className="w-full flex justify-end p-2 pt-8" />
+      <SidebarTrigger className="w-full flex justify-end p-2 pt-12" />
       {navItems.map((item) => (
         <NavLink
           key={item.path}

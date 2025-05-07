@@ -38,7 +38,7 @@ const Governance = () => {
   };
 
   return (
-    <div className="max-w-[2000px] mx-auto space-y-6">
+    <div className="max-w-[2000px] mx-auto space-y-6 w-full min-w-0 md:space-y-6 py-6 pt-20 pl-20 md:pl-24 lg:px-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold">Governance</h1>
         <div className="flex items-center space-x-4">

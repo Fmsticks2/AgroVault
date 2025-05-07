@@ -18,7 +18,7 @@ const Tokenomics = () => {
   ];
 
   return (
-    <div className="max-w-[2000px] mx-auto space-y-8 pb-8">
+    <div className="max-w-[2000px] mx-auto space-y-8 pb-8 w-full min-w-0 md:space-y-6 py-6 pt-24 pl-20 md:pl-24 lg:px-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold">Tokenomics</h1>
       </div>

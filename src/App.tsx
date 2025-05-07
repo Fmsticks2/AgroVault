@@ -73,7 +73,7 @@ function AppContent() {
           <Navbar />
         </div>
       )}
-      <div className="pt-16">
+      <div className="overflow-x-hidden">
         {!isAdminRoute ? (
           <SidebarProvider defaultOpen={false}>
             <div className="grid grid-cols-[auto,1fr] w-full">

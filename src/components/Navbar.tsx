@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { WalletIcon, ChevronDownIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -16,6 +16,8 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [availableWallets, setAvailableWallets] = useState<WalletInfo[]>([]);
   const [selectedWallet, setSelectedWallet] = useState<string>('');
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const loadWallets = async () => {
@@ -29,6 +31,25 @@ const Navbar = () => {
     };
     loadWallets();
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isMobileMenuOpen &&
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
 
   const showError = (message: string) => {
     toast.error(message, {
@@ -180,8 +201,9 @@ const Navbar = () => {
           {/* Profile Component */}
           {isConnected && <Profile />}
 
-          {/* Mobile Menu Button*/}
+          {/* Mobile Menu Button */}
           <button
+            ref={buttonRef}
             type="button"
             className="p-2 rounded-lg hover:bg-background-light lg:hidden transition-all duration-300"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -196,74 +218,76 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu*/}
-      <Transition
-        show={isMobileMenuOpen}
-        enter="transition-all ease-out duration-200"
-        enterFrom="opacity-0 -translate-y-2"
-        enterTo="opacity-100 translate-y-0"
-        leave="transition-all ease-in duration-150"
-        leaveFrom="opacity-100 translate-y-0"
-        leaveTo="opacity-0 -translate-y-2"
-        className="absolute top-full left-0 right-0 bg-background border-b border-border lg:hidden z-40"
-      >
-        <div className="p-4 space-y-3">
-          <div className="flex flex-col space-y-2">
-            {[
-              { path: '/', label: 'Analytics' },
-              { path: '/operations', label: 'Operations' },
-              { path: '/rates', label: 'Rates' },
-              { path: '/whitepaper', label: 'Whitepaper' },
-              { path: '/tokenomics', label: 'Tokenomics' },
-              { path: '/settings', label: 'Settings' },
-            ].map(({ path, label }) => (
-              <Link
-                key={path}
-                to={path}
-                className={cn(
-                  "px-3 py-2 text-sm rounded-lg",
-                  location.pathname === path 
-                    ? "bg-background-light text-primary" 
-                    : "text-text-secondary hover:bg-background-light"
-                )}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {label}
-              </Link>
-            ))}
-          </div>
+      {/* Mobile Menu */}
+      <div ref={mobileMenuRef}>
+        <Transition
+          show={isMobileMenuOpen}
+          enter="transition-all ease-out duration-200"
+          enterFrom="opacity-0 -translate-y-2"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition-all ease-in duration-150"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 -translate-y-2"
+          className="absolute top-full left-0 right-0 bg-background border-b border-border lg:hidden z-40"
+        >
+          <div className="p-4 space-y-3">
+            <div className="flex flex-col space-y-2">
+              {[
+                { path: '/', label: 'Analytics' },
+                { path: '/operations', label: 'Operations' },
+                { path: '/rates', label: 'Rates' },
+                { path: '/whitepaper', label: 'Whitepaper' },
+                { path: '/tokenomics', label: 'Tokenomics' },
+                { path: '/settings', label: 'Settings' },
+              ].map(({ path, label }) => (
+                <Link
+                  key={path}
+                  to={path}
+                  className={cn(
+                    "px-3 py-2 text-sm rounded-lg",
+                    location.pathname === path 
+                      ? "bg-background-light text-primary" 
+                      : "text-text-secondary hover:bg-background-light"
+                  )}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
 
-          {/* Mobile Wallet Connection */}
-          <div className="pt-2 border-t border-border">
-            {isConnected ? (
-              <button
-                onClick={disconnectWallet}
-                className="w-full text-left px-3 py-2 text-sm text-text-secondary hover:bg-background-light rounded-lg"
-              >
-                Disconnect Wallet
-              </button>
-            ) : (
-              <div className="space-y-2">
-                {availableWallets.map((wallet) => (
-                  wallet.installed && (
-                    <button
-                      key={wallet.name}
-                      onClick={() => connectWallet(wallet.name)}
-                      disabled={isLoading}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 text-sm rounded-lg ${
-                        isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-background-light'
-                      }`}
-                    >
-                      <WalletIcon className="h-4 w-4" />
-                      <span>Connect {wallet.name}</span>
-                    </button>
-                  )
-                ))}
-              </div>
-            )}
+            {/* Mobile Wallet Connection */}
+            <div className="pt-2 border-t border-border">
+              {isConnected ? (
+                <button
+                  onClick={disconnectWallet}
+                  className="w-full text-left px-3 py-2 text-sm text-text-secondary hover:bg-background-light rounded-lg"
+                >
+                  Disconnect Wallet
+                </button>
+              ) : (
+                <div className="space-y-2">
+                  {availableWallets.map((wallet) => (
+                    wallet.installed && (
+                      <button
+                        key={wallet.name}
+                        onClick={() => connectWallet(wallet.name)}
+                        disabled={isLoading}
+                        className={`w-full flex items-center space-x-2 px-3 py-2 text-sm rounded-lg ${
+                          isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-background-light'
+                        }`}
+                      >
+                        <WalletIcon className="h-4 w-4" />
+                        <span>Connect {wallet.name}</span>
+                      </button>
+                    )
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </Transition>
+        </Transition>
+      </div>
     </nav>
   );
 };
