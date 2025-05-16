@@ -48,7 +48,7 @@ const Dashboard = () => {
       </div>
       
       {/* Protocol Metrics */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 w-full">
         {mockData.protocolMetrics.map((metric) => (
           <div key={metric.name} className="w-[calc(100%-1px)] stat-card flex flex-col p-2 md:p-4 rounded-lg">
             <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
@@ -125,7 +125,7 @@ const Dashboard = () => {
             <div className="flex flex-col gap-2">
               {mockData.topAssets.map((asset) => (
                 <div key={asset.symbol} 
-                     className="grid grid-cols-[auto,1fr,auto] sm:grid-cols-[auto,1fr,auto] items-center gap-3 p-2 hover:bg-background-light rounded-lg transition-colors">
+                  className="grid grid-cols-[auto,1fr,auto] sm:grid-cols-[auto,1fr,auto] items-center gap-3 p-2 hover:bg-background-light rounded-lg transition-colors">
                   <div className="hidden sm:flex h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-background-light items-center justify-center flex-shrink-0">
                     <span className="text-xs sm:text-sm">{asset.symbol.charAt(0)}</span>
                   </div>

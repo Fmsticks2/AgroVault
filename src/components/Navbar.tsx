@@ -96,7 +96,7 @@ const Navbar = () => {
       <div className="max-w-[2000px] mx-auto flex items-center justify-between gap-4">
         {/* Logo Section */}
         <div className="flex items-center gap-3">
-          <Link to="/" className="flex items-center gap-2 sm:gap-3">
+          <Link to="/" className="flex items-center max-xs:gap-0 xs:gap-2 sm:gap-3">
             <img src="/new logo.svg" alt="AgroVault" className="h-8 w-8 sm:h-10 sm:w-10" />
             <span className="text-lg sm:text-xl font-semibold text-text-primary">AgroVault</span>
           </Link>

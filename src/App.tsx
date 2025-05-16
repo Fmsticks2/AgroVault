@@ -77,7 +77,7 @@ function AppContent() {
         {!isAdminRoute ? (
           <SidebarProvider defaultOpen={false}>
             <div className="grid grid-cols-[auto,1fr] w-full">
-              <Sidebar className="border-r bg-background">
+              <Sidebar className="border-r bg-background h-full">
                 <SidebarNavigation />
               </Sidebar>
               <MainContent />
