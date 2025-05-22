@@ -31,8 +31,12 @@ const SidebarNavigation = () => {
             }`
           }
         >
-          <item.icon className="h-5 w-5" />
-          {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap">{item.name}</span>}
+          {({ isActive }) => (
+            <>
+              <item.icon className={`h-5 w-5 transition-transform duration-200 group-hover:scale-125 group-hover:rotate-12 ${isActive ? 'text-blue-500 drop-shadow-lg' : 'text-green-400 hover:text-yellow-400'}`} />
+              {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap">{item.name}</span>}
+            </>
+          )}
         </NavLink>
       ))}
     </SidebarContent>
