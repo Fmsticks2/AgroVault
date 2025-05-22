@@ -79,6 +79,9 @@ export const SidebarProvider = React.forwardRef<
 
     const state = open ? "expanded" : "collapsed"
 
+    // Add cascade/collapsible sidebar logic
+    // Sidebar can be toggled between expanded and collapsed
+    // Expose state and toggleSidebar in context
     const contextValue = React.useMemo<SidebarContext>(
       () => ({
         state,
