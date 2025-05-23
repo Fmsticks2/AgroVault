@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/solid';
 
 interface CryptoPrice {
   id: string;
