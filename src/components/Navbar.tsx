@@ -173,9 +173,7 @@ const Navbar = () => {
                   {({ active }) => (
                     <button
                       onClick={() => connectWallet(wallet)}
-                      className={`${
-                        active ? "bg-gray-100" : ""
-                      } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                      className={`${active ? "bg-gray-100" : ""} group flex rounded-md items-center w-full px-2 py-2 text-sm`}
                     >
                       {wallet}
                     </button>
@@ -187,9 +185,7 @@ const Navbar = () => {
                   {({ active }) => (
                     <button
                       onClick={disconnectWallet}
-                      className={`${
-                        active ? "bg-gray-100" : ""
-                      } group flex rounded-md items-center w-full px-2 py-2 text-sm text-red-600`}
+                      className={`${active ? "bg-gray-100" : ""} group flex rounded-md items-center w-full px-2 py-2 text-sm text-red-600`}
                     >
                       Disconnect
                     </button>
