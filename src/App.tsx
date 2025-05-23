@@ -15,6 +15,7 @@ import Rates from './pages/Rates';
 import Settings from './pages/Settings';
 import Tokenomics from './pages/Tokenomics';
 import Whitepaper from './pages/Whitepaper';
+import CryptoPrices from './pages/CryptoPrices';
 // Admin imports
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -56,6 +57,7 @@ const MainContent = () => {
           <Route path="/settings" element={<Settings />} />
           <Route path="/tokenomics" element={<Tokenomics />} />
           <Route path="/whitepaper" element={<Whitepaper />} />
+          <Route path="/crypto-prices" element={<CryptoPrices />} />
         </Routes>
       </div>
     </main>

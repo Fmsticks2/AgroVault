@@ -76,7 +76,8 @@ const Settings = () => {
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="block text-text-secondary">Default Network</label>
-              <select title="theme" className="w-full bg-background-light border border-border rounded-lg px-4 py-2">
+              <select title="theme" className="w-full bg-background-light border border-border rounded-lg px-4 py-2" defaultValue="aleo-mainnet">
+                <option value="aleo-mainnet">Aleo Mainnet</option>
                 <option value="ethereum">Ethereum Mainnet</option>
                 <option value="polygon">Polygon</option>
                 <option value="arbitrum">Arbitrum</option>

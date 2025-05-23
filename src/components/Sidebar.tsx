@@ -3,7 +3,17 @@ import { NavLink } from 'react-router-dom';
 import { ChartBarIcon, CurrencyDollarIcon, BanknotesIcon, BuildingLibraryIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 
 
-const navItems = [
+const adminNavItems = [
+  { name: 'Analytics', path: '/admin/analytics', icon: ChartBarIcon },
+  { name: 'Dashboard', path: '/admin/dashboard', icon: ChartBarIcon },
+  { name: 'User Management', path: '/admin/user-management', icon: UserGroupIcon },
+  { name: 'Platform Settings', path: '/admin/platform-settings', icon: BuildingLibraryIcon },
+  { name: 'Settings', path: '/admin/settings', icon: BuildingLibraryIcon },
+  { name: 'Tokenomics', path: '/admin/tokenomics', icon: CurrencyDollarIcon },
+  { name: 'Transaction Monitor', path: '/admin/transaction-monitor', icon: BanknotesIcon },
+  { name: 'Yield Farming', path: '/admin/yield-farming', icon: BuildingLibraryIcon },
+];
+const userNavItems = [
   { name: 'Dashboard', path: '/', icon: ChartBarIcon },
   { name: 'Staking', path: '/staking', icon: CurrencyDollarIcon },
   { name: 'Lending', path: '/lending', icon: BanknotesIcon },
@@ -14,11 +24,11 @@ const navItems = [
 const SidebarNavigation = () => {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
-
+  const isAdmin = localStorage.getItem('isAdmin');
   return (
     <SidebarContent>
       <SidebarTrigger className="w-full flex justify-end p-2 pt-12" />
-      {navItems.map((item) => (
+      {(isAdmin ? adminNavItems : userNavItems).map((item) => (
         <NavLink
           key={item.path}
           to={item.path}
