@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 import { useAleoWallet } from '../../hooks/useAleoWallet';
-import { toast } from 'react-toastify';
+import { detectWalletAvailability } from '../../services/aleoWalletService';
+import { CheckIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 
 // Onboarding steps
 const STEPS = {
@@ -44,6 +46,7 @@ const Onboarding = () => {
   const [inputSeedPhrase, setInputSeedPhrase] = useState<string[]>(Array(12).fill(''));
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [walletAvailability, setWalletAvailability] = useState<{LEO: boolean, Puzzle: boolean}>({LEO: false, Puzzle: false});
   
   // Check if user has already completed onboarding
   useEffect(() => {
@@ -59,15 +62,38 @@ const Onboarding = () => {
       setSeedPhrase(generateSeedPhrase());
     }
   }, [currentStep, seedPhrase]);
+
+  // Check wallet availability when component mounts or when reaching wallet connection step
+  useEffect(() => {
+    const checkWalletAvailability = async () => {
+      try {
+        const [leoAvailable, puzzleAvailable] = await Promise.all([
+          detectWalletAvailability.LEO(),
+          detectWalletAvailability.Puzzle()
+        ]);
+        setWalletAvailability({ LEO: leoAvailable, Puzzle: puzzleAvailable });
+      } catch (error) {
+        console.error('Error checking wallet availability:', error);
+        setWalletAvailability({ LEO: false, Puzzle: false });
+      }
+    };
+
+    if (currentStep === STEPS.WALLET_CONNECTION) {
+      checkWalletAvailability();
+    }
+  }, [currentStep]);
   
   // Handle wallet connection
-  const handleConnectWallet = async () => {
+  const handleConnectWallet = async (walletType: 'LEO' | 'Puzzle') => {
     try {
-      await connect('LEO'); // Default to LEO wallet
-      toast.success('Wallet connected successfully!');
-      goToNextStep();
+      await connect(walletType);
+      // Only show success and proceed if connection was actually successful
+      if (isConnected) {
+        toast.success(`${walletType} Wallet connected successfully!`);
+        // Don't auto-advance, let user click continue when ready
+      }
     } catch (error) {
-      toast.error('Failed to connect wallet. Please try again.');
+      toast.error(`Failed to connect ${walletType} wallet. Please try again.`);
       console.error('Wallet connection error:', error);
     }
   };
@@ -200,27 +226,90 @@ const Onboarding = () => {
             <h1 className="text-2xl font-bold">Connect Your Wallet</h1>
             <p className="text-text-secondary">
               To use AgroVault, you'll need to connect an Aleo-compatible wallet.
-              We support LEO Wallet and Puzzle Wallet.
+              Choose from the supported wallets below.
             </p>
             <div className="py-6">
               {!isConnected ? (
-                <button
-                  onClick={handleConnectWallet}
-                  className="bg-primary text-white py-3 px-6 rounded-lg hover:bg-primary-dark transition-colors"
-                >
-                  Connect Wallet
-                </button>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto">
+                    <button
+                      onClick={() => handleConnectWallet('LEO')}
+                      disabled={isConnecting || !walletAvailability.LEO}
+                      className={`py-4 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex flex-col items-center space-y-2 ${
+                        walletAvailability.LEO 
+                          ? 'bg-primary text-white hover:bg-primary-dark' 
+                          : 'bg-gray-300 text-gray-600'
+                      }`}
+                    >
+                      <span className="font-semibold">LEO Wallet</span>
+                      <span className="text-sm opacity-90">
+                        {walletAvailability.LEO ? 'Browser Extension' : 'Not Installed'}
+                      </span>
+                      {walletAvailability.LEO && (
+                        <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => handleConnectWallet('Puzzle')}
+                      disabled={isConnecting || !walletAvailability.Puzzle}
+                      className={`py-4 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex flex-col items-center space-y-2 ${
+                        walletAvailability.Puzzle 
+                          ? 'bg-secondary text-white hover:bg-secondary-dark' 
+                          : 'bg-gray-300 text-gray-600'
+                      }`}
+                    >
+                      <span className="font-semibold">Puzzle Wallet</span>
+                      <span className="text-sm opacity-90">
+                        {walletAvailability.Puzzle ? 'Mobile & Web' : 'Not Available'}
+                      </span>
+                      {walletAvailability.Puzzle && (
+                        <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      )}
+                    </button>
+                  </div>
+                  
+                  {/* Wallet installation help */}
+                  {(!walletAvailability.LEO || !walletAvailability.Puzzle) && (
+                    <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                      <h4 className="font-medium text-blue-800 mb-2">Need to install a wallet?</h4>
+                      <div className="space-y-2 text-sm text-blue-700">
+                        {!walletAvailability.LEO && (
+                          <p>• <strong>LEO Wallet:</strong> Install from the Chrome Web Store for browser use</p>
+                        )}
+                        {!walletAvailability.Puzzle && (
+                          <p>• <strong>Puzzle Wallet:</strong> Available as mobile app or web wallet</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {isConnecting && (
+                    <div className="flex items-center justify-center space-x-2 mt-4">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                      <span className="text-sm text-text-secondary">Connecting to wallet...</span>
+                    </div>
+                  )}
+                  {error && (
+                    <div className="mt-4 p-3 bg-red-100 border border-red-300 rounded-lg">
+                      <p className="text-red-700 text-sm">{error}</p>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="p-4 bg-background-light rounded-lg">
+                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center justify-center space-x-2 mb-2">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <span className="text-green-700 font-medium">Wallet Connected Successfully</span>
+                    </div>
                     <p className="text-sm text-text-secondary mb-2">Connected Address:</p>
-                    <p className="font-mono text-sm break-all">{address}</p>
+                    <p className="font-mono text-sm break-all bg-white p-2 rounded border">{address}</p>
+                    <p className="text-xs text-text-secondary mt-2">Wallet Type: {walletType}</p>
                   </div>
                   <button
                     onClick={goToNextStep}
-                    className="bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors"
+                    className="bg-primary text-white py-3 px-6 rounded-lg hover:bg-primary-dark transition-colors"
                   >
-                    Continue
+                    Continue to Next Step
                   </button>
                 </div>
               )}

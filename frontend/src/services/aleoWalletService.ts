@@ -11,7 +11,32 @@ export interface Wallet {
   connect(): Promise<string>; // Returns address
   signTransaction(tx: any): Promise<string>; // Returns signed tx
   sendTransaction(signedTx: string): Promise<string>; // Returns tx hash
+  isAvailable(): Promise<boolean>; // Check if wallet is available
 }
+
+// Utility functions for wallet detection
+export const detectWalletAvailability = {
+  LEO: async (): Promise<boolean> => {
+    try {
+      // Check if LEO wallet extension is installed
+      return typeof window !== 'undefined' && 
+             'leo' in window && 
+             typeof (window as any).leo === 'object';
+    } catch {
+      return false;
+    }
+  },
+  
+  Puzzle: async (): Promise<boolean> => {
+    try {
+      // Check if Puzzle wallet is available (web or mobile)
+      const result = await PuzzleSDK.getAccount();
+      return true; // If SDK loads, Puzzle is available
+    } catch {
+      return false;
+    }
+  }
+};
 
 // LEO Wallet integration using @demox-labs/aleo-wallet-adapter-leo
 export class LEOWallet implements Wallet {
@@ -23,8 +48,18 @@ export class LEOWallet implements Wallet {
     this.programId = programId;
   }
 
+  async isAvailable(): Promise<boolean> {
+    return detectWalletAvailability.LEO();
+  }
+
   async connect(): Promise<string> {
     try {
+      // First check if wallet is available
+      const isAvailable = await this.isAvailable();
+      if (!isAvailable) {
+        throw new Error('LEO Wallet extension is not installed. Please install it from the Chrome Web Store.');
+      }
+
       if (!this.adapter.connected) {
         await this.adapter.connect();
       }
@@ -94,8 +129,18 @@ export class PuzzleWallet implements Wallet {
     this.programId = programId;
   }
 
+  async isAvailable(): Promise<boolean> {
+    return detectWalletAvailability.Puzzle();
+  }
+
   async connect(): Promise<string> {
     try {
+      // First check if wallet is available
+      const isAvailable = await this.isAvailable();
+      if (!isAvailable) {
+        throw new Error('Puzzle Wallet is not available. Please install the Puzzle Wallet app or use a supported browser.');
+      }
+
       // Check if already connected
       const connectionStatus = await PuzzleSDK.getAccount();
       
