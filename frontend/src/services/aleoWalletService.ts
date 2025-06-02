@@ -3,7 +3,6 @@ import { WalletAdapterNetwork } from '@demox-labs/aleo-wallet-adapter-base';
 import { LeoWalletAdapter } from '@demox-labs/aleo-wallet-adapter-leo';
 import { Transaction } from '@demox-labs/aleo-wallet-adapter-base';
 import * as PuzzleSDK from '@puzzlehq/sdk';
-import { EventType, EventStatus } from '@puzzlehq/sdk';
 
 export type WalletType = 'LEO' | 'Puzzle';
 
@@ -82,18 +81,18 @@ export class LEOWallet implements Wallet {
         throw new Error('Wallet not connected');
       }
 
-      // Create a transaction object
+      // Create a new transaction object
       const transaction = new Transaction();
       
-      // Add the function inputs to the transaction
-      // This will vary based on your specific contract function
+      // Add the function call to the transaction
       transaction.add({
-        programId: this.programId,
-        functionName: tx.functionName,
-        inputs: tx.inputs,
+        program: this.programId,
+        function: tx.functionName || tx.function,
+        inputs: tx.inputs || [],
+        fee: tx.fee || 0.001
       });
 
-      // Sign the transaction
+      // Sign the transaction using the adapter
       const signedTx = await this.adapter.signTransaction(transaction);
       return JSON.stringify(signedTx);
     } catch (error) {
@@ -171,11 +170,11 @@ export class PuzzleWallet implements Wallet {
 
       // Create a transaction event using the SDK's requestCreateEvent method
       const result = await PuzzleSDK.requestCreateEvent({
-        type: PuzzleSDK.EventType.Execute,
+        type: 'Execute' as any, // Use string instead of enum
         programId: this.programId,
-        functionId: tx.functionName,
-        fee: tx.fee || 0.001, // Default fee if not provided
-        inputs: tx.inputs,
+        functionId: tx.functionName || tx.function,
+        fee: tx.fee || 0.001,
+        inputs: tx.inputs || [],
       });
 
       if (!result.eventId) {
@@ -205,7 +204,7 @@ export class PuzzleWallet implements Wallet {
       }
 
       // Poll for transaction completion if needed
-      if (result.event.status !== PuzzleSDK.EventStatus.Finalized) {
+      if (result.event.status !== 'Finalized') {
         // In a real implementation, you might want to implement polling here
         // For now, we'll just return the event ID and let the caller check status
         return eventId;

@@ -39,7 +39,7 @@ const generateSeedPhrase = () => {
 
 const Onboarding = () => {
   const navigate = useNavigate();
-  const { connect, disconnect, isConnected, address } = useAleoWallet();
+  const { connect, disconnect, isConnected, address, isConnecting, error, walletType } = useAleoWallet();
   
   const [currentStep, setCurrentStep] = useState(STEPS.WELCOME);
   const [seedPhrase, setSeedPhrase] = useState<string[]>([]);
@@ -84,16 +84,13 @@ const Onboarding = () => {
   }, [currentStep]);
   
   // Handle wallet connection
-  const handleConnectWallet = async (walletType: 'LEO' | 'Puzzle') => {
+  const handleConnectWallet = async (selectedWalletType: 'LEO' | 'Puzzle') => {
     try {
-      await connect(walletType);
-      // Only show success and proceed if connection was actually successful
-      if (isConnected) {
-        toast.success(`${walletType} Wallet connected successfully!`);
-        // Don't auto-advance, let user click continue when ready
-      }
+      await connect(selectedWalletType);
+      toast.success(`${selectedWalletType} Wallet connected successfully!`);
     } catch (error) {
-      toast.error(`Failed to connect ${walletType} wallet. Please try again.`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      toast.error(`Failed to connect ${selectedWalletType} wallet: ${errorMessage}`);
       console.error('Wallet connection error:', error);
     }
   };

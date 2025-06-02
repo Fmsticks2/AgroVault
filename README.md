@@ -314,4 +314,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Built with ❤️ for the agricultural community**
 
-For more information, visit our [website](https://agrovault.com) or follow us on [Twitter](https://twitter.com/agrovault).
+For more information, visit our upcoming page [website](https://agrovault.com) or follow developer on [Twitter](https://twitter.com/web3spida).

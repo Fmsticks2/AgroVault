@@ -23,16 +23,30 @@ export const useAleoWallet = (): UseAleoWalletReturn => {
   // Check for existing connection on mount
   useEffect(() => {
     const checkExistingConnection = async () => {
-      // You could implement persistence of wallet connection here
-      // For example, check localStorage for a saved wallet type
+      // Check localStorage for a saved wallet type
       const savedWalletType = localStorage.getItem('aleoWalletType') as WalletType | null;
+      const savedAddress = localStorage.getItem('aleoWalletAddress');
       
-      if (savedWalletType) {
+      if (savedWalletType && savedAddress) {
         try {
-          await connect(savedWalletType);
+          // Try to reconnect to the saved wallet
+          const wallet = getWallet(savedWalletType);
+          const isAvailable = await wallet.isAvailable();
+          
+          if (isAvailable) {
+            // Set the state without calling connect again
+            setWalletType(savedWalletType);
+            setAddress(savedAddress);
+            setIsConnected(true);
+          } else {
+            // Clear saved state if wallet is no longer available
+            localStorage.removeItem('aleoWalletType');
+            localStorage.removeItem('aleoWalletAddress');
+          }
         } catch (error) {
           // If reconnection fails, clear the saved state
           localStorage.removeItem('aleoWalletType');
+          localStorage.removeItem('aleoWalletAddress');
           console.error('Failed to reconnect to wallet:', error);
         }
       }
@@ -47,7 +61,18 @@ export const useAleoWallet = (): UseAleoWalletReturn => {
     
     try {
       const wallet = getWallet(type);
+      
+      // Check if wallet is available before attempting connection
+      const isAvailable = await wallet.isAvailable();
+      if (!isAvailable) {
+        throw new Error(`${type} wallet is not available. Please install the wallet extension.`);
+      }
+      
       const walletAddress = await wallet.connect();
+      
+      if (!walletAddress) {
+        throw new Error('Failed to get wallet address');
+      }
       
       setWalletType(type);
       setAddress(walletAddress);
@@ -55,10 +80,13 @@ export const useAleoWallet = (): UseAleoWalletReturn => {
       
       // Save connection info for persistence
       localStorage.setItem('aleoWalletType', type);
+      localStorage.setItem('aleoWalletAddress', walletAddress);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error connecting to wallet';
       setError(errorMessage);
+      setIsConnected(false);
       console.error('Wallet connection error:', error);
+      throw error; // Re-throw to allow caller to handle
     } finally {
       setIsConnecting(false);
     }
@@ -68,7 +96,9 @@ export const useAleoWallet = (): UseAleoWalletReturn => {
     setWalletType(null);
     setAddress('');
     setIsConnected(false);
+    setError(null);
     localStorage.removeItem('aleoWalletType');
+    localStorage.removeItem('aleoWalletAddress');
   }, []);
 
   const signTransaction = useCallback(async (tx: any): Promise<string> => {
