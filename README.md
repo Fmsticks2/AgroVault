@@ -1,54 +1,73 @@
-# React + TypeScript + Vite
+# AgroVault - Decentralized Agricultural Marketplace
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+AgroVault is a decentralized platform built on the Aleo blockchain that connects farmers, traders, and consumers in a secure and transparent agricultural marketplace. The platform leverages zero-knowledge proofs for privacy-preserving transactions while maintaining transparency where needed.
 
-Currently, two official plugins are available:
+## Features
+- **Decentralized Marketplace**: Buy and sell agricultural products with privacy-preserving transactions
+- **Product Ownership Verification**: Track and verify product ownership using blockchain technology
+- **Live Crypto Prices**: Real-time tracking of cryptocurrency prices including Aleo tokens
+- **Wallet Integration**: Secure connection with Aleo-compatible wallets
+- **Smart Contract Security**: Automated and secure transaction handling
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
+- Frontend: React + TypeScript + Vite
+- Styling: TailwindCSS
+- Blockchain: Aleo Network
+- Smart Contracts: Leo Programming Language
 
-## Expanding the ESLint configuration
+## Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+- Aleo Wallet Browser Extension
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Installation
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/agrovault.git
+cd agrovault
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+2. Install dependencies
+```bash
+npm install
+# or
+yarn install
 ```
+
+3. Create a .env file and add necessary environment variables
+```env
+VITE_SOME_KEY=your_key_here
+```
+
+4. Start the development server
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+## Smart Contract Structure
+The marketplace smart contract (`Marketplace.leo`) handles:
+- Product listing and management
+- Secure transactions between buyers and sellers
+- Category-based product organization
+- Recent purchase tracking
+
+## Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Security
+- All transactions are secured using Aleo's zero-knowledge proof technology
+- Smart contracts are audited for security vulnerabilities
+- Private data remains encrypted on-chain
+
+## Support
+For support, please open an issue in the GitHub repository or contact the development team.
+
+## Acknowledgments
+- Aleo Network for providing the privacy-focused blockchain infrastructure
+- The open-source community for various tools and libraries used in this project

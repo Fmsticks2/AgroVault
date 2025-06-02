@@ -16,6 +16,9 @@ import Settings from './pages/Settings';
 import Tokenomics from './pages/Tokenomics';
 import Whitepaper from './pages/Whitepaper';
 import CryptoPrices from './pages/CryptoPrices';
+import NewTransaction from './pages/NewTransaction';
+import ViewAllOperations from './pages/ViewAllOperations';
+import Marketplace from './pages/Marketplace';
 // Admin imports
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -48,6 +51,7 @@ const MainContent = () => {
         <Routes>
           {/* Main routes */}
           <Route path="/" element={<Dashboard />} />
+          <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/staking" element={<Staking />} />
           <Route path="/lending" element={<Lending />} />
           <Route path="/yield-farming" element={<YieldFarming />} />
@@ -58,6 +62,8 @@ const MainContent = () => {
           <Route path="/tokenomics" element={<Tokenomics />} />
           <Route path="/whitepaper" element={<Whitepaper />} />
           <Route path="/crypto-prices" element={<CryptoPrices />} />
+          <Route path="/new-transaction" element={<NewTransaction />} />
+          <Route path="/view-all-operations" element={<ViewAllOperations />} />
         </Routes>
       </div>
     </main>

@@ -1,6 +1,6 @@
 import { SidebarContent, SidebarTrigger, useSidebar } from '../components/CustomSidebar';
 import { NavLink } from 'react-router-dom';
-import { ChartBarIcon, CurrencyDollarIcon, BanknotesIcon, BuildingLibraryIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import { ChartBarIcon, CurrencyDollarIcon, BanknotesIcon, BuildingLibraryIcon, UserGroupIcon, ShoppingBagIcon } from '@heroicons/react/24/outline';
 
 
 const adminNavItems = [
@@ -15,6 +15,7 @@ const adminNavItems = [
 ];
 const userNavItems = [
   { name: 'Dashboard', path: '/', icon: ChartBarIcon },
+  { name: 'Marketplace', path: '/marketplace', icon: ShoppingBagIcon },
   { name: 'Staking', path: '/staking', icon: CurrencyDollarIcon },
   { name: 'Lending', path: '/lending', icon: BanknotesIcon },
   { name: 'Yield Farming', path: '/yield-farming', icon: BuildingLibraryIcon },
