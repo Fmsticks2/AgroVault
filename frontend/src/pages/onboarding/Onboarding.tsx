@@ -391,16 +391,21 @@ const Onboarding = () => {
   };
   
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl bg-background-dark rounded-xl shadow-xl p-6 sm:p-8">
-        {renderProgressIndicator()}
-        <div className="py-6">
-          {renderStepContent()}
+    <div className="min-h-screen w-full bg-background-dark flex flex-col">
+      <div className="flex-1 flex flex-col p-6 sm:p-8 lg:p-12">
+        <div className="w-full max-w-4xl mx-auto flex-1 flex flex-col">
+          {renderProgressIndicator()}
+          <div className="flex-1 flex items-center justify-center py-8">
+            <div className="w-full max-w-2xl">
+              {renderStepContent()}
+            </div>
+          </div>
+          {renderNavButtons()}
         </div>
-        {renderNavButtons()}
       </div>
     </div>
   );
+
 };
 
 export default Onboarding;

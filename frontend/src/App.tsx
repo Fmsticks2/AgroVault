@@ -35,7 +35,7 @@ import TransactionMonitor from './pages/admin/TransactionMonitor';
 import { SidebarProvider, Sidebar, useSidebar } from './components/CustomSidebar';
 import SidebarNavigation from './components/Sidebar';
 import { cn } from './lib/utils';
-import { Toaster } from '../frontend/src/ui/Toaster';
+import { Toaster } from './ui/Toaster';
 
 const MainContent = () => {
   const { state, isMobile } = useSidebar();
@@ -54,10 +54,6 @@ const MainContent = () => {
     )}>
       <div className="w-full max-w-full">
         <Routes>
-          {/* Onboarding routes */}
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/seed-phrase-recovery" element={<SeedPhraseRecovery />} />
-          
           {/* Main routes - protected by OnboardingGuard */}
           <Route path="/" element={<OnboardingGuard><Dashboard /></OnboardingGuard>} />
           <Route path="/marketplace" element={<OnboardingGuard><Marketplace /></OnboardingGuard>} />
@@ -82,6 +78,19 @@ const MainContent = () => {
 function AppContent() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const isOnboardingRoute = location.pathname.startsWith('/onboarding') || location.pathname === '/seed-phrase-recovery';
+
+  // If it's an onboarding route, render only the onboarding content without any layout
+  if (isOnboardingRoute) {
+    return (
+      <div className="min-h-screen bg-background-dark text-text-primary font-sans">
+        <Routes>
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/seed-phrase-recovery" element={<SeedPhraseRecovery />} />
+        </Routes>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background-dark text-text-primary font-sans">
