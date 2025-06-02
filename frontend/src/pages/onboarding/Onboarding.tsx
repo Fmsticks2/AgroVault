@@ -1535,9 +1535,9 @@ const Onboarding = () => {
             </motion.div>
           </div>
           
-          {/* Progress percentage */}
+          {/* Progress percentage - moved to bottom right */}
           <motion.div 
-            className="absolute -top-8 right-0 text-xs font-semibold text-primary"
+            className="absolute top-4 right-0 text-xs font-semibold text-primary bg-background-light/80 backdrop-blur-sm px-2 py-1 rounded-md border border-primary/20"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
