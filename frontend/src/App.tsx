@@ -5,6 +5,7 @@ import './App.css';
 
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
+import OnboardingGuard from './components/OnboardingGuard';
 import Dashboard from './pages/Dashboard';
 import Staking from './pages/Staking';
 import Lending from './pages/Lending';
@@ -19,6 +20,9 @@ import CryptoPrices from './pages/CryptoPrices';
 import NewTransaction from './pages/NewTransaction';
 import ViewAllOperations from './pages/ViewAllOperations';
 import Marketplace from './pages/Marketplace';
+// Onboarding imports
+import Onboarding from './pages/onboarding/Onboarding';
+import SeedPhraseRecovery from './pages/onboarding/SeedPhraseRecovery';
 // Admin imports
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -31,6 +35,7 @@ import TransactionMonitor from './pages/admin/TransactionMonitor';
 import { SidebarProvider, Sidebar, useSidebar } from './components/CustomSidebar';
 import SidebarNavigation from './components/Sidebar';
 import { cn } from './lib/utils';
+import { Toaster } from '../frontend/src/ui/Toaster';
 
 const MainContent = () => {
   const { state, isMobile } = useSidebar();
@@ -49,21 +54,25 @@ const MainContent = () => {
     )}>
       <div className="w-full max-w-full">
         <Routes>
-          {/* Main routes */}
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/marketplace" element={<Marketplace />} />
-          <Route path="/staking" element={<Staking />} />
-          <Route path="/lending" element={<Lending />} />
-          <Route path="/yield-farming" element={<YieldFarming />} />
-          <Route path="/governance" element={<Governance />} />
-          <Route path="/operations" element={<Operations />} />
-          <Route path="/rates" element={<Rates />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/tokenomics" element={<Tokenomics />} />
-          <Route path="/whitepaper" element={<Whitepaper />} />
-          <Route path="/crypto-prices" element={<CryptoPrices />} />
-          <Route path="/new-transaction" element={<NewTransaction />} />
-          <Route path="/view-all-operations" element={<ViewAllOperations />} />
+          {/* Onboarding routes */}
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/seed-phrase-recovery" element={<SeedPhraseRecovery />} />
+          
+          {/* Main routes - protected by OnboardingGuard */}
+          <Route path="/" element={<OnboardingGuard><Dashboard /></OnboardingGuard>} />
+          <Route path="/marketplace" element={<OnboardingGuard><Marketplace /></OnboardingGuard>} />
+          <Route path="/staking" element={<OnboardingGuard><Staking /></OnboardingGuard>} />
+          <Route path="/lending" element={<OnboardingGuard><Lending /></OnboardingGuard>} />
+          <Route path="/yield-farming" element={<OnboardingGuard><YieldFarming /></OnboardingGuard>} />
+          <Route path="/governance" element={<OnboardingGuard><Governance /></OnboardingGuard>} />
+          <Route path="/operations" element={<OnboardingGuard><Operations /></OnboardingGuard>} />
+          <Route path="/rates" element={<OnboardingGuard><Rates /></OnboardingGuard>} />
+          <Route path="/settings" element={<OnboardingGuard><Settings /></OnboardingGuard>} />
+          <Route path="/tokenomics" element={<OnboardingGuard><Tokenomics /></OnboardingGuard>} />
+          <Route path="/whitepaper" element={<OnboardingGuard><Whitepaper /></OnboardingGuard>} />
+          <Route path="/crypto-prices" element={<OnboardingGuard><CryptoPrices /></OnboardingGuard>} />
+          <Route path="/new-transaction" element={<OnboardingGuard><NewTransaction /></OnboardingGuard>} />
+          <Route path="/view-all-operations" element={<OnboardingGuard><ViewAllOperations /></OnboardingGuard>} />
         </Routes>
       </div>
     </main>
@@ -114,6 +123,7 @@ function AppContent() {
 function App() {
   return (
     <Router>
+      <Toaster />
       <AppContent />
       <ToastContainer position="top-right" autoClose={3000} />
     </Router>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { getWallet, WalletType } from "../services/aleoWalletService";
+import { useAleoWallet } from "../hooks/useAleoWallet";
+import { WalletType } from "../services/aleoWalletService";
 
 const isProductOwner = (product: Product, address: string) => {
   return product.owner.toLowerCase() === address.toLowerCase();
@@ -323,36 +324,53 @@ const OwnershipPage: React.FC<{ address: string; products: Product[] }> = ({ add
 
 const Marketplace: React.FC = () => {
   const [products] = useState<Product[]>(mockProducts);
-  const [walletType, setWalletType] = useState<WalletType | null>(null);
-  const [address, setAddress] = useState<string>("");
-  const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showOwnership, setShowOwnership] = useState(false);
-
-  const connectWallet = async (type: WalletType) => {
-    setWalletType(type);
-    try {
-      const wallet = getWallet(type);
-      const addr = await wallet.connect();
-      setAddress(addr);
-    } catch (e) {
-      console.error("Wallet connection failed:", e);
-    }
-  };
+  const [loading, setLoading] = useState(false);
+  
+  // Use our custom hook for wallet functionality
+  const {
+    walletType,
+    address,
+    isConnected,
+    isConnecting,
+    error,
+    connect,
+    disconnect,
+    signTransaction,
+    sendTransaction
+  } = useAleoWallet();
 
   const handleBuy = async (product: Product) => {
-    if (!address) {
+    if (!isConnected || !address) {
       alert("Please connect your wallet first");
       return;
     }
+    
     setLoading(true);
     try {
-      // TODO: Integrate with LEO contract buy_product logic
-      console.log(`Buying product: ${product.name}`);
-      alert("Transaction will be enabled once smart contract is integrated");
+      // Create transaction object for the smart contract
+      const transaction = {
+        functionName: "buy_product",
+        inputs: [
+          product.id.toString(), // product_id
+          "1", // quantity to buy
+          product.price.toString(), // price
+        ],
+      };
+      
+      // Sign the transaction
+      const signedTx = await signTransaction(transaction);
+      
+      // Send the transaction
+      const txId = await sendTransaction(signedTx);
+      
+      console.log(`Transaction submitted: ${txId}`);
+      alert(`Purchase initiated! Transaction ID: ${txId.slice(0, 10)}...`);
     } catch (error) {
       console.error("Purchase failed:", error);
+      alert(`Purchase failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
@@ -373,37 +391,52 @@ const Marketplace: React.FC = () => {
             <p className="text-gray-600 mb-4">Connect your wallet to start trading agricultural products</p>
           </div>
           <div className="flex flex-col md:flex-row gap-4">
-            {!address ? (
+            {!isConnected ? (
               <>
                 <button 
                   className="px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-background-dark font-medium transition-all duration-300" 
-                  onClick={() => connectWallet("LEO")}
-                  disabled={loading}
+                  onClick={() => connect("LEO")}
+                  disabled={isConnecting}
                 >
-                  Connect LEO Wallet
+                  {isConnecting ? 'Connecting...' : 'Connect LEO Wallet'}
                 </button>
                 <button 
                   className="px-4 py-2 rounded-lg bg-background-light hover:bg-background text-text-primary font-medium border border-border transition-all duration-300" 
-                  onClick={() => connectWallet("Puzzle")}
-                  disabled={loading}
+                  onClick={() => connect("Puzzle")}
+                  disabled={isConnecting}
                 >
-                  Connect Puzzle Wallet
+                  {isConnecting ? 'Connecting...' : 'Connect Puzzle Wallet'}
                 </button>
               </>
             ) : (
               <div className="flex items-center gap-2 bg-background-light p-3 rounded-lg">
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="text-sm font-medium">Connected: {address.slice(0, 6)}...{address.slice(-4)}</span>
+                <span className="text-sm font-medium">
+                  Connected: {address.slice(0, 6)}...{address.slice(-4)}
+                  {walletType && ` (${walletType})`}
+                </span>
                 <button
                   onClick={() => setShowOwnership(!showOwnership)}
                   className="px-4 py-2 bg-background-light text-text-primary rounded-lg font-medium hover:bg-background transition-colors"
                 >
                   {showOwnership ? 'View Marketplace' : 'My Products'}
                 </button>
+                <button
+                  onClick={disconnect}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors"
+                >
+                  Disconnect
+                </button>
               </div>
             )}
           </div>
         </div>
+
+        {error && (
+          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            Error: {error}
+          </div>
+        )}
 
         {showOwnership && address ? (
           <OwnershipPage address={address} products={products} />
@@ -444,11 +477,11 @@ const Marketplace: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-text-secondary">Owner: {product.owner.slice(0, 6)}...{product.owner.slice(-4)}</span>
                       <button
-                        className={`px-4 py-2 rounded-lg ${!address ? 'bg-gray-500 cursor-not-allowed' : 'bg-primary hover:bg-primary-dark'} text-background-dark font-medium transition-all duration-300`}
-                        onClick={() => handleBuy(product)}
-                        disabled={loading || !address}
+                        className={`px-4 py-2 rounded-lg ${!isConnected ? 'bg-gray-500 cursor-not-allowed' : 'bg-primary hover:bg-primary-dark'} text-background-dark font-medium transition-all duration-300`}
+                        onClick={() => setSelectedProduct(product)}
+                        disabled={loading || !isConnected}
                       >
-                        {!address ? 'Connect Wallet' : 'Buy Now'}
+                        {!isConnected ? 'Connect Wallet' : 'View Details'}
                       </button>
                     </div>
                   </div>
@@ -461,8 +494,8 @@ const Marketplace: React.FC = () => {
                 product={selectedProduct}
                 onClose={() => setSelectedProduct(null)}
                 onBuy={handleBuy}
-                isOwner={isProductOwner(selectedProduct, address)}
-                address={address}
+                isOwner={isProductOwner(selectedProduct, address || '')}
+                address={address || ''}
               />
             )}
           </>

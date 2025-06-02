@@ -1,73 +1,317 @@
-# AgroVault - Decentralized Agricultural Marketplace
+# AgroVault - Decentralized Agricultural Finance Platform
 
-## Overview
-AgroVault is a decentralized platform built on the Aleo blockchain that connects farmers, traders, and consumers in a secure and transparent agricultural marketplace. The platform leverages zero-knowledge proofs for privacy-preserving transactions while maintaining transparency where needed.
+![AgroVault Logo](frontend/public/logo.svg)
 
-## Features
-- **Decentralized Marketplace**: Buy and sell agricultural products with privacy-preserving transactions
-- **Product Ownership Verification**: Track and verify product ownership using blockchain technology
-- **Live Crypto Prices**: Real-time tracking of cryptocurrency prices including Aleo tokens
-- **Wallet Integration**: Secure connection with Aleo-compatible wallets
-- **Smart Contract Security**: Automated and secure transaction handling
+AgroVault is a comprehensive decentralized platform built on Aleo blockchain that revolutionizes agricultural finance and supply chain management. The platform connects farmers, investors, and consumers through secure, transparent, and efficient blockchain-based solutions.
 
-## Tech Stack
-- Frontend: React + TypeScript + Vite
-- Styling: TailwindCSS
-- Blockchain: Aleo Network
-- Smart Contracts: Leo Programming Language
+## 🌟 Features
 
-## Prerequisites
-- Node.js (v16 or higher)
+### Core Functionality
+- **Decentralized Marketplace**: Trade agricultural products with smart contract security
+- **DeFi Integration**: Staking, lending, and yield farming for agricultural assets
+- **Supply Chain Tracking**: Transparent tracking from farm to consumer
+- **Governance System**: Community-driven decision making
+- **Multi-Wallet Support**: Compatible with various Aleo wallets
+
+### Advanced Features
+- **Real-time Analytics**: Market insights and performance metrics
+- **Risk Assessment**: AI-powered risk analysis for investments
+- **Certification Management**: Digital certificates for organic and quality standards
+- **Cross-border Payments**: Seamless international transactions
+- **Insurance Integration**: Crop insurance and risk mitigation
+
+## 🏗️ Architecture
+
+### Monorepo Structure
+```
+AgroVault/
+├── frontend/          # React + Vite frontend application
+├── backend/           # Node.js + Express API server
+│   └── contracts/     # Aleo smart contracts
+├── scripts/           # Deployment and setup scripts
+└── docs/             # Documentation
+```
+
+### Technology Stack
+
+**Frontend**
+- React 18+ with TypeScript
+- Vite for build tooling
+- Tailwind CSS for styling
+- Aleo Wallet Adapter for blockchain integration
+- Recharts for data visualization
+
+**Backend**
+- Node.js with Express.js
+- RESTful API architecture
+- CORS and security middleware
+- Environment-based configuration
+
+**Blockchain**
+- Aleo blockchain for smart contracts
+- Leo programming language
+- Zero-knowledge proofs for privacy
+- Testnet3 for development
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
 - npm or yarn
-- Aleo Wallet Browser Extension
+- Git
+- PowerShell (for Windows deployment scripts)
 
-## Installation
-1. Clone the repository
-```bash
-git clone https://github.com/yourusername/agrovault.git
-cd agrovault
+### Local Development
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/AgroVault.git
+   cd AgroVault
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm run install:all
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   # Frontend
+   cp frontend/.env.example frontend/.env.local
+   
+   # Backend
+   cp backend/.env.example backend/.env
+   ```
+
+4. **Start development servers**
+   ```bash
+   npm run dev
+   ```
+
+   This starts:
+   - Frontend: http://localhost:3000
+   - Backend: http://localhost:5000
+
+## 🌐 Deployment
+
+### Production Deployment
+
+AgroVault is designed for deployment across multiple platforms:
+
+- **Frontend**: Vercel (recommended)
+- **Backend**: Render (recommended)
+- **Smart Contracts**: Aleo Testnet
+
+### Deployment Guide
+
+For detailed deployment instructions, see [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
+
+#### Quick Deployment Steps
+
+1. **Deploy Smart Contracts**
+   ```powershell
+   # Run as Administrator
+   .\scripts\setup-aleo.ps1
+   .\scripts\deploy-contract.ps1
+   ```
+
+2. **Deploy Backend to Render**
+   - Connect GitHub repository
+   - Set environment variables
+   - Deploy with auto-build
+
+3. **Deploy Frontend to Vercel**
+   - Import GitHub repository
+   - Configure build settings
+   - Set environment variables
+
+## 📖 API Documentation
+
+### Backend Endpoints
+
+#### Health Check
+```
+GET /
+Response: { "message": "AgroVault API is running" }
 ```
 
-2. Install dependencies
-```bash
-npm install
-# or
-yarn install
+#### Authentication
+```
+POST /auth/login
+POST /auth/register
+POST /auth/logout
 ```
 
-3. Create a .env file and add necessary environment variables
+#### Marketplace
+```
+GET    /marketplace/products
+POST   /marketplace/products
+GET    /marketplace/products/:id
+PUT    /marketplace/products/:id
+DELETE /marketplace/products/:id
+```
+
+#### Transactions
+```
+GET  /transactions
+POST /transactions
+```
+
+#### Analytics
+```
+GET /analytics/dashboard
+GET /analytics/market-stats
+```
+
+### Smart Contract Functions
+
+#### Marketplace.leo
+```leo
+// Create a new product listing
+create_product(name, description, price, category, quantity, harvest_date, certification)
+
+// Purchase a product
+purchase_product(product_id, price)
+
+// Update product status
+update_product_status(product_id, is_listed)
+```
+
+## 🔧 Development
+
+### Project Scripts
+
+```bash
+# Development
+npm run dev              # Start both frontend and backend
+npm run dev:frontend     # Start frontend only
+npm run dev:backend      # Start backend only
+
+# Building
+npm run build            # Build frontend for production
+npm run build:frontend   # Build frontend only
+
+# Installation
+npm run install:all      # Install all dependencies
+npm run install:frontend # Install frontend dependencies
+npm run install:backend  # Install backend dependencies
+```
+
+### Environment Variables
+
+#### Frontend (.env.local)
 ```env
-VITE_SOME_KEY=your_key_here
+VITE_API_BASE_URL=http://localhost:5000
+VITE_ALEO_NETWORK=testnet3
+VITE_ALEO_PROGRAM_ID=marketplace.aleo
+VITE_WALLET_NETWORK=testnet3
 ```
 
-4. Start the development server
+#### Backend (.env)
+```env
+PORT=5000
+NODE_ENV=development
+CORS_ORIGIN=http://localhost:3000
+ALEO_NETWORK=testnet3
+ALEO_PROGRAM_ID=marketplace.aleo
+```
+
+## 🧪 Testing
+
+### Frontend Testing
 ```bash
-npm run dev
-# or
-yarn dev
+cd frontend
+npm run test
+npm run test:coverage
 ```
 
-## Smart Contract Structure
-The marketplace smart contract (`Marketplace.leo`) handles:
-- Product listing and management
-- Secure transactions between buyers and sellers
-- Category-based product organization
-- Recent purchase tracking
+### Backend Testing
+```bash
+cd backend
+npm run test
+```
 
-## Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
+### Smart Contract Testing
+```bash
+cd backend/contracts
+aleo test
+```
 
-## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 🔒 Security
 
-## Security
-- All transactions are secured using Aleo's zero-knowledge proof technology
-- Smart contracts are audited for security vulnerabilities
-- Private data remains encrypted on-chain
+### Security Features
+- Zero-knowledge proofs for transaction privacy
+- Secure smart contract architecture
+- CORS protection
+- Input validation and sanitization
+- Environment variable protection
 
-## Support
-For support, please open an issue in the GitHub repository or contact the development team.
+### Security Best Practices
+- Never commit private keys to repository
+- Use environment variables for all secrets
+- Regular dependency updates
+- Security audits for smart contracts
 
-## Acknowledgments
-- Aleo Network for providing the privacy-focused blockchain infrastructure
-- The open-source community for various tools and libraries used in this project
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Guidelines
+- Follow TypeScript best practices
+- Write comprehensive tests
+- Update documentation
+- Follow commit message conventions
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+### Getting Help
+- 📖 [Documentation](docs/)
+- 🐛 [Issue Tracker](https://github.com/yourusername/AgroVault/issues)
+- 💬 [Discussions](https://github.com/yourusername/AgroVault/discussions)
+
+### Resources
+- [Aleo Documentation](https://developer.aleo.org/)
+- [Leo Language Guide](https://developer.aleo.org/leo/)
+- [React Documentation](https://react.dev/)
+- [Node.js Documentation](https://nodejs.org/docs/)
+
+## 🗺️ Roadmap
+
+### Phase 1 (Current)
+- ✅ Core marketplace functionality
+- ✅ Basic DeFi features
+- ✅ Wallet integration
+- ✅ Deployment infrastructure
+
+### Phase 2 (Q2 2024)
+- 🔄 Advanced analytics
+- 🔄 Mobile application
+- 🔄 Insurance integration
+- 🔄 Multi-language support
+
+### Phase 3 (Q3 2024)
+- 📋 Cross-chain integration
+- 📋 AI-powered recommendations
+- 📋 Advanced governance features
+- 📋 Enterprise partnerships
+
+## 📊 Project Status
+
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Aleo](https://img.shields.io/badge/blockchain-Aleo-purple)
+
+---
+
+**Built with ❤️ for the agricultural community**
+
+For more information, visit our [website](https://agrovault.com) or follow us on [Twitter](https://twitter.com/agrovault).

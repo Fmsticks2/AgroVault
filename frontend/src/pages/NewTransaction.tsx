@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAleoWallet } from "../hooks/useAleoWallet";
+import { toast } from "react-toastify";
 
 const NewTransaction: React.FC = () => {
   const navigate = useNavigate();
@@ -9,12 +11,54 @@ const NewTransaction: React.FC = () => {
     recipient: "",
     description: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Use our custom hook for wallet functionality
+  const {
+    address,
+    isConnected,
+    signTransaction,
+    sendTransaction
+  } = useAleoWallet();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement transaction submission
-    console.log("Transaction data:", formData);
-    navigate("/operations");
+    
+    if (!isConnected || !address) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
+    
+    try {
+      setIsSubmitting(true);
+      
+      // Create transaction object for the smart contract
+      const transaction = {
+        programId: "marketplace.aleo",
+        functionName: "transfer",
+        inputs: [
+          formData.recipient, // recipient address
+          formData.amount,    // amount as a string
+          formData.type,      // transaction type
+        ]
+      };
+      
+      // Sign the transaction
+      const signedTx = await signTransaction(transaction);
+      
+      // Send the transaction
+      const txId = await sendTransaction(signedTx);
+      
+      console.log(`Transaction submitted: ${txId}`);
+      toast.success(`Transaction submitted! ID: ${txId.slice(0, 10)}...`);
+      navigate("/operations");
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Transaction error:', error);
+      toast.error(`Transaction failed: ${errorMessage}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -98,8 +142,9 @@ const NewTransaction: React.FC = () => {
             <button
               type="submit"
               className="btn-primary py-2 px-4 rounded-lg"
+              disabled={isSubmitting || !isConnected}
             >
-              Create Transaction
+              {isSubmitting ? 'Processing...' : !isConnected ? 'Connect Wallet First' : 'Create Transaction'}
             </button>
           </div>
         </form>

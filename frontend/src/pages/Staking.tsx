@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { CurrencyDollarIcon, ArrowTrendingUpIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { useAleoWallet } from '../hooks/useAleoWallet';
+import { toast } from 'react-toastify';
 
 const mockData = {
   stakingPools: [
@@ -27,10 +29,57 @@ const mockData = {
 const Staking = () => {
   const [selectedPool, setSelectedPool] = useState(mockData.stakingPools[0]);
   const [stakeAmount, setStakeAmount] = useState('');
+  const [isStaking, setIsStaking] = useState(false);
+  
+  // Use our custom hook for wallet functionality
+  const {
+    address,
+    isConnected,
+    signTransaction,
+    sendTransaction
+  } = useAleoWallet();
 
-  const handleStake = () => {
-    // Implement staking logic here
-    console.log(`Staking ${stakeAmount} ${selectedPool.token}`);
+  const handleStake = async () => {
+    if (!isConnected || !address) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
+    
+    if (!stakeAmount || parseFloat(stakeAmount) < selectedPool.minStake) {
+      toast.error(`Minimum stake amount is ${selectedPool.minStake} ${selectedPool.token}`);
+      return;
+    }
+    
+    try {
+      setIsStaking(true);
+      
+      // Create transaction object for the smart contract
+      const transaction = {
+        programId: "marketplace.aleo",
+        functionName: "stake",
+        inputs: [
+          stakeAmount,                // amount to stake
+          selectedPool.id.toString(), // pool ID
+          selectedPool.lockPeriod.toString() // lock period in days
+        ]
+      };
+      
+      // Sign the transaction
+      const signedTx = await signTransaction(transaction);
+      
+      // Send the transaction
+      const txId = await sendTransaction(signedTx);
+      
+      console.log(`Staking transaction submitted: ${txId}`);
+      toast.success(`Staking ${stakeAmount} ${selectedPool.token}! Transaction ID: ${txId.slice(0, 10)}...`);
+      setStakeAmount('');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Staking error:', error);
+      toast.error(`Staking failed: ${errorMessage}`);
+    } finally {
+      setIsStaking(false);
+    }
   };
 
   return (
@@ -129,9 +178,11 @@ const Staking = () => {
             <button
               className="btn-primary w-full mt-4"
               onClick={handleStake}
-              disabled={!stakeAmount}
+              disabled={!stakeAmount || isStaking || !isConnected}
             >
-              Stake {selectedPool.token}
+              {!isConnected ? 'Connect Wallet First' : 
+               isStaking ? 'Processing...' : 
+               `Stake ${selectedPool.token}`}
             </button>
           </div>
 

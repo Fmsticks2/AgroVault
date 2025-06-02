@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tab } from '@headlessui/react';
 import { ArrowDownIcon, ArrowUpIcon, ShieldCheckIcon, BanknotesIcon } from '@heroicons/react/24/outline';
+import { useAleoWallet } from '../hooks/useAleoWallet';
+import { toast } from 'react-hot-toast';
 
 const mockData = {
   markets: [
@@ -12,6 +14,8 @@ const mockData = {
       totalBorrowed: 65240000,
       walletBalance: 1000,
       collateralFactor: 0.75,
+      programId: 'marketplace.aleo',
+      functionName: 'supply_agri',
     },
     {
       token: 'ETH',
@@ -21,6 +25,8 @@ const mockData = {
       totalBorrowed: 31280000,
       walletBalance: 2.5,
       collateralFactor: 0.8,
+      programId: 'marketplace.aleo',
+      functionName: 'supply_eth',
     },
     {
       token: 'USDC',
@@ -30,6 +36,8 @@ const mockData = {
       totalBorrowed: 18920000,
       walletBalance: 5000,
       collateralFactor: 0.85,
+      programId: 'marketplace.aleo',
+      functionName: 'supply_usdc',
     },
   ],
 };
@@ -37,9 +45,74 @@ const mockData = {
 const Lending = () => {
   const [selectedMarket, setSelectedMarket] = useState(mockData.markets[0]);
   const [amount, setAmount] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  
+  const {
+    walletType,
+    walletAddress,
+    isConnected,
+    isLoading,
+    connectWallet,
+    signTransaction,
+    sendTransaction,
+    error
+  } = useAleoWallet();
 
-  const handleAction = (action: 'supply' | 'borrow') => {
-    console.log(`${action === 'supply' ? 'Supplying' : 'Borrowing'} ${amount} ${selectedMarket.token}`);
+  // Update wallet balances when connected
+  useEffect(() => {
+    if (isConnected && walletAddress) {
+      // In a real implementation, you would fetch actual balances from the blockchain
+      // For now, we'll continue using the mock data
+      console.log('Wallet connected:', walletAddress);
+    }
+  }, [isConnected, walletAddress]);
+
+  const handleAction = async (action: 'supply' | 'borrow') => {
+    if (!isConnected) {
+      toast.error('Please connect your wallet first');
+      return;
+    }
+
+    if (!amount || parseFloat(amount) <= 0) {
+      toast.error('Please enter a valid amount');
+      return;
+    }
+
+    setIsProcessing(true);
+    
+    try {
+      const programId = selectedMarket.programId;
+      // Determine which function to call based on action and token
+      const functionName = action === 'supply' 
+        ? selectedMarket.functionName 
+        : `borrow_${selectedMarket.token.toLowerCase()}`;
+      
+      // Create inputs for the transaction
+      const inputs = [
+        amount, // Amount as first parameter
+        walletAddress // User address as second parameter
+      ];
+
+      // Sign the transaction
+      const signedTx = await signTransaction({
+        programId,
+        functionName,
+        inputs,
+      });
+
+      if (signedTx) {
+        // Send the transaction
+        const tx = await sendTransaction(signedTx);
+        
+        toast.success(`${action === 'supply' ? 'Supply' : 'Borrow'} transaction submitted`);
+        console.log('Transaction:', tx);
+      }
+    } catch (err) {
+      console.error('Transaction error:', err);
+      toast.error(`Failed to ${action}: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -162,9 +235,11 @@ const Lending = () => {
                     <button
                       className="btn-primary w-full mt-4"
                       onClick={() => handleAction('supply')}
-                      disabled={!amount}
+                      disabled={!amount || !isConnected || isProcessing}
                     >
-                      Supply {selectedMarket.token}
+                      {!isConnected ? 'Connect Wallet' : 
+                       isProcessing ? 'Processing...' : 
+                       `Supply ${selectedMarket.token}`}
                     </button>
                   </div>
                 </Tab.Panel>
@@ -204,9 +279,11 @@ const Lending = () => {
                     <button
                       className="btn-primary w-full mt-4"
                       onClick={() => handleAction('borrow')}
-                      disabled={!amount}
+                      disabled={!amount || !isConnected || isProcessing}
                     >
-                      Borrow {selectedMarket.token}
+                      {!isConnected ? 'Connect Wallet' : 
+                       isProcessing ? 'Processing...' : 
+                       `Borrow ${selectedMarket.token}`}
                     </button>
                   </div>
                 </Tab.Panel>
