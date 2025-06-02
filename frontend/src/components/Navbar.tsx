@@ -112,7 +112,7 @@ const Navbar = () => {
       {/* Left: Logo + AgroVault name */}
       <div className="flex items-center space-x-2">
         {/* Replace with your logo image if available */}
-        <img src="/new logo.svg" alt="AgroVault Logo" className="h-8 w-8 mr-2" />
+        <img src="/logo.svg" alt="AgroVault Logo" className="h-8 w-8 mr-2" />
         <Link to="/" className="text-2xl font-bold text-primary">AgroVault</Link>
       </div>
       {/* Center: Navigation Links */}

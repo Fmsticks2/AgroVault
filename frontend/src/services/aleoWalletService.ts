@@ -28,10 +28,15 @@ export const detectWalletAvailability = {
   
   Puzzle: async (): Promise<boolean> => {
     try {
-      // Check if Puzzle wallet is available (web or mobile)
-      const result = await PuzzleSDK.getAccount();
-      return true; // If SDK loads, Puzzle is available
+      // Check if Puzzle wallet is available by checking for the SDK and wallet object
+      if (typeof window !== 'undefined' && (window as any).puzzle) {
+        return true;
+      }
+      // Alternative check: try to initialize SDK without connecting
+      const isAvailable = await PuzzleSDK.isAvailable?.() || false;
+      return isAvailable;
     } catch {
+      // If SDK is not loaded or wallet is not available
       return false;
     }
   }
